@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dossiê Científico — Modelos Atômicos</title>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FIREBASE — Cole aqui as suas credenciais (ver instruções)
+     ═══════════════════════════════════════════════════════════════ -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── RESET & BASE ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --dalton:    #1A5276;
+  --thomson:   #784212;
+  --ruther:    #7B241C;
+  --bohr:      #145A32;
+  --final:     #4A235A;
+  --bg:        #0d1b2a;
+  --card:      #ffffff;
+  --text:      #1a1a1a;
+  --muted:     #666;
+  --border:    #e0e0e0;
+  --radius:    14px;
+  --shadow:    0 8px 40px rgba(0,0,0,0.35);
+}
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: var(--text);
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(26,82,118,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(20,90,50,0.2) 0%, transparent 50%);
+}
+
+/* ── SCREENS ────────────────────────────────────────────────────── */
+.screen { display: none; }
+.screen.active { display: flex; }
+
+/* ── HOME SCREEN ────────────────────────────────────────────────── */
+#screen-home {
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.home-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 44px 36px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+
+.home-atom { font-size: 56px; text-align: center; margin-bottom: 8px; }
+
+.home-title {
+  font-family: 'Lora', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1A3A5C;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.home-sub {
+  font-size: 15px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.divider {
+  width: 50px; height: 3px;
+  background: #2E86C1;
+  border-radius: 2px;
+  margin: 0 auto 28px;
+}
+
+.field-group { margin-bottom: 18px; }
+
+.field-group label {
+  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 7px;
+}
+
+.field-group input,
+.field-group select {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s;
+  background: #fff;
+}
+
+.field-group input:focus,
+.field-group select:focus { border-color: #2E86C1; }
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.home-note {
+  background: #EBF5FB;
+  border-left: 4px solid #2E86C1;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: #1A5276;
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: #1A3A5C;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: 'Lora', serif;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: #1F4E79; }
+.btn-primary:active { transform: scale(0.98); }
+
+.error-msg {
+  color: #C0392B;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ── MAIN APP SCREEN ────────────────────────────────────────────── */
+#screen-app {
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 60px;
+  min-height: 100vh;
+}
+
+.app-wrapper {
+  width: 100%;
+  max-width: 680px;
+  background: var(--card);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+}
+
+/* Header */
+.app-header {
+  padding: 16px 20px 12px;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background 0.3s;
+}
+
+.header-row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.header-group-info {
+  font-size: 13px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+.header-group-info strong { font-size: 15px; display: block; }
+
+.sync-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.sync-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #2ECC71;
+  animation: pulse 2s infinite;
+}
+.sync-dot.saving { background: #F39C12; animation: none; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.progress-bar-bg {
+  height: 5px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  background: rgba(255,255,255,0.7);
+}
+
+/* Model tabs */
+.model-tabs {
+  display: flex;
+  gap: 5px;
+  padding: 10px 12px;
+  background: #f4f4f4;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.model-tabs::-webkit-scrollbar { display: none; }
+
+.model-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Source Sans 3', sans-serif;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+.model-tab.active { opacity: 1; color: #fff; }
+.model-tab.partial { opacity: 0.85; }
+
+/* Section nav */
+.section-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+
+.section-dots {
+  display: flex;
+  gap: 6px;
+}
+.section-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.section-dot.active { transform: scale(1.3); }
+.section-dot.filled { opacity: 0.7; }
+
+.nav-btn {
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.2s;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.nav-btn:hover { border-color: #aaa; color: #333; }
+.nav-btn.next-model { color: #fff; border: none; }
+
+/* Form body */
+.form-body {
+  flex: 1;
+  padding: 24px 20px 32px;
+}
+
+.section-titulo {
+  font-family: 'Lora', serif;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.section-pergunta {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+textarea, .answer-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Source Sans 3', sans-serif;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+  color: var(--text);
+  transition: border 0.2s;
+}
+textarea:focus, .answer-input:focus { border-color: #2E86C1; }
+
+.bullet-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.bullet-label {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 95px;
+  white-space: nowrap;
+}
+
+.traj-card {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.traj-header {
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 16px;
+  color: #fff;
+}
+.traj-body { padding: 12px 16px; }
+.traj-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 5px;
+  margin-top: 10px;
+  display: block;
+}
+
+.camadas-grid {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.camada-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.camada-circle {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+.camada-input {
+  width: 60px;
+  padding: 8px 6px;
+  text-align: center;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: 'Source Sans 3', sans-serif;
+  outline: none;
+}
+
+.elemento-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.elemento-nome {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.elemento-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 2px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-pdf {
+  padding: 11px 20px;
+  background: #fff;
+  border: 2px solid #1A3A5C;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1A3A5C;
+  cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  transition: all 0.2s;
+}
+.btn-pdf:hover { background: #EBF5FB; }
+
+.btn-advance {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  transition: all 0.2s;
+  flex: 1;
+  max-width: 280px;
+}
+
+/* Final screen */
+.final-card {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.final-card-header {
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 16px;
+  color: #fff;
+}
+.final-card-body { padding: 14px 16px; }
+.final-field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 5px;
+  margin-top: 12px;
+  display: block;
+}
+.final-field-label:first-child { margin-top: 0; }
+
+/* ── PRINT / PDF ────────────────────────────────────────────────── */
+#print-area {
+  display: none;
+}
+
+@media print {
+  body > *:not(#print-area) { display: none !important; }
+  #print-area {
+    display: block !important;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 12px;
+    color: #000;
+    padding: 0;
+    margin: 0;
+  }
+
+  .print-cover {
+    text-align: center;
+    padding: 60px 40px;
+    border-bottom: 3px solid #1A3A5C;
+    margin-bottom: 30px;
+    page-break-after: always;
+  }
+  .print-cover h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 28px;
+    color: #1A3A5C;
+    margin-bottom: 8px;
+  }
+  .print-cover .sub { font-size: 16px; color: #555; margin-bottom: 24px; }
+  .print-cover .group-box {
+    display: inline-block;
+    border: 2px solid #1A3A5C;
+    border-radius: 10px;
+    padding: 14px 32px;
+    margin-top: 10px;
+  }
+  .print-cover .group-box p { margin: 2px 0; font-size: 14px; }
+  .print-cover .group-box strong { font-size: 18px; }
+
+  .print-model { page-break-inside: avoid; margin-bottom: 0; }
+  .print-model-header {
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    page-break-after: avoid;
+  }
+  .print-section { margin-bottom: 16px; page-break-inside: avoid; }
+  .print-section-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  .print-question {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .print-answer {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    min-height: 30px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+  }
+  .print-page-break { page-break-before: always; }
+  .print-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .print-table th, .print-table td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    font-size: 11px;
+    vertical-align: top;
+  }
+  .print-table th { background: #eee; font-weight: 700; }
+  .print-final-section { margin-top: 24px; page-break-inside: avoid; }
+}
+
+/* ── LOADING OVERLAY ─────────────────────────────────────────────── */
+#loading {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  gap: 16px;
+}
+#loading .spin {
+  font-size: 48px;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading p { color: #fff; font-size: 16px; }
+#loading.hidden { display: none; }
+
+/* ── DONE SCREEN ─────────────────────────────────────────────────── */
+#screen-done {
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.done-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 48px 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.done-icon { font-size: 64px; margin-bottom: 16px; }
+.done-title {
+  font-family: 'Lora', serif;
+  font-size: 26px;
+  color: #145A32;
+  margin-bottom: 10px;
+}
+.done-sub { font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 24px; }
+.done-box {
+  background: #D5F5E3;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.done-box p { color: #1E8449; font-size: 14px; line-height: 1.5; }
+.done-box strong { font-size: 18px; display: block; margin-bottom: 4px; color: #145A32; }
+</style>
+
+</head>
+<body>
+
+<!-- ── LOADING ─────────────────────────────────────────────────────── -->
+
+<div id="loading">
+  <div class="spin">⚛️</div>
+  <p>Conectando...</p>
+</div>
+
+<!-- ── HOME ───────────────────────────────────────────────────────── -->
+
+<div id="screen-home" class="screen">
+  <div class="home-card">
+    <div class="home-atom">⚛️</div>
+    <h1 class="home-title">Dossiê Científico</h1>
+    <p class="home-sub">Modelos Atômicos · 1º Ano do Ensino Médio</p>
+    <div class="divider"></div>
+
+```
+<div class="field-group">
+  <label>Seu nome completo</label>
+  <input type="text" id="input-nome" placeholder="Ex: Ana Paula Silva" autocomplete="off">
+</div>
+
+<div class="row-2">
+  <div class="field-group">
+    <label>Turma</label>
+    <input type="text" id="input-turma" placeholder="Ex: 1A" autocomplete="off" maxlength="4">
+  </div>
+  <div class="field-group">
+    <label>Número do grupo</label>
+    <input type="number" id="input-grupo" placeholder="Ex: 3" min="1" max="30">
+  </div>
+</div>
+
+<div class="field-group">
+  <label>Modelo que você vai pesquisar</label>
+  <select id="input-modelo">
+    <option value="">— Escolha o seu modelo —</option>
+    <option value="dalton">🔵 Dalton</option>
+    <option value="thomson">🟡 Thomson</option>
+    <option value="rutherford">🔴 Rutherford</option>
+    <option value="bohr">🟢 Bohr</option>
+  </select>
+</div>
+
+<div class="home-note">
+  💡 Cada integrante pesquisa um modelo diferente, mas todos podem navegar pelo dossiê completo do grupo. No final, o grupo gera um PDF único com tudo junto.
+</div>
+
+<p class="error-msg" id="home-error" style="display:none"></p>
+<button class="btn-primary" onclick="entrar()">Entrar no Dossiê →</button>
+```
+
+  </div>
+</div>
+
+<!-- ── APP ─────────────────────────────────────────────────────────── -->
+
+<div id="screen-app" class="screen">
+  <div class="app-wrapper">
+
+```
+<div class="app-header" id="app-header">
+  <div class="header-row1">
+    <div class="header-group-info">
+      <strong id="h-grupo">Grupo —</strong>
+      <span id="h-turma-nome"></span>
+    </div>
+    <div class="sync-badge" id="sync-badge">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-text">Conectado</span>
+    </div>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="model-tabs" id="model-tabs"></div>
+
+<div class="section-nav">
+  <div class="section-dots" id="section-dots"></div>
+  <button class="nav-btn" id="btn-prev" onclick="prevSection()">← Anterior</button>
+</div>
+
+<div class="form-body" id="form-body"></div>
+
+<div class="bottom-bar">
+  <button class="btn-pdf" onclick="gerarPDF()">📄 Gerar PDF do Grupo</button>
+  <button class="btn-advance" id="btn-next" onclick="nextSection()">Próxima seção →</button>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ── DONE ────────────────────────────────────────────────────────── -->
+
+<div id="screen-done" class="screen">
+  <div class="done-card">
+    <div class="done-icon">🏆</div>
+    <h2 class="done-title">Dossiê Completo!</h2>
+    <p class="done-sub">Todas as seções foram preenchidas.<br>Agora gere o PDF do grupo e entregue ao professor.</p>
+    <div class="done-box">
+      <strong id="done-grupo-nome"></strong>
+      <p>O PDF conterá as respostas de todos os integrantes do grupo juntas em um único documento.</p>
+    </div>
+    <button class="btn-primary" onclick="gerarPDF()">📄 Gerar PDF do Grupo</button>
+    <br><br>
+    <button class="btn-pdf" style="width:100%" onclick="voltarApp()">← Voltar e revisar</button>
+  </div>
+</div>
+
+<!-- ── PRINT AREA ──────────────────────────────────────────────────── -->
+
+<div id="print-area"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ⚙️  CONFIGURAÇÃO DO FIREBASE
+   Cole aqui as credenciais do seu projeto Firebase.
+   Instruções: veja o arquivo COMO_CONFIGURAR.txt
+   ══════════════════════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyB3Tzuk3Q0_0GdihjlBGUeA_-XnalyQFWI",
+  authDomain:        "dossie-atomos.firebaseapp.com",
+  databaseURL:       "https://dossie-atomos-default-rtdb.firebaseio.com",
+  projectId:         "dossie-atomos",
+  storageBucket:     "dossie-atomos.firebasestorage.app",
+  messagingSenderId: "570859054446",
+  appId:             "1:570859054446:web:7f088b30e2533c59514d7f"
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   📚 DADOS DO DOSSIÊ
+   ══════════════════════════════════════════════════════════════════ */
+const MODELOS = [
+  {
+    id: "dalton", nome: "Dalton", emoji: "🔵", cor: "#1A5276",
+    secoes: [
+      { id: "contexto",  titulo: "1. Contexto histórico",       pergunta: "Em que século Dalton desenvolveu seu modelo? O que os cientistas já sabiam sobre a matéria nessa época?",                                              tipo: "texto", linhas: 3 },
+      { id: "postulados",titulo: "2. As ideias principais",      pergunta: "Liste pelo menos 4 postulados (ideias centrais) do modelo de Dalton:",                                                                                  tipo: "lista", itens: ["Postulado 1", "Postulado 2", "Postulado 3", "Postulado 4"] },
+      { id: "explicava", titulo: "3. O que explicava bem",       pergunta: "Quais fenômenos ou leis químicas o modelo conseguia justificar?",                                                                                       tipo: "texto", linhas: 3 },
+      { id: "limitacao", titulo: "4. A grande limitação",        pergunta: "O que o modelo não conseguia explicar? O que ficou de fora?",                                                                                          tipo: "texto", linhas: 3 },
+      { id: "derrubou",  titulo: "5. O que derrubou esse modelo",pergunta: "Que descoberta ou experimento mostrou que o modelo estava incompleto?",                                                                                 tipo: "texto", linhas: 2 },
+      { id: "apelido",   titulo: "6. Apelido do modelo",         pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                                                  tipo: "texto", linhas: 2 },
+      { id: "conexao",   titulo: "7. Conexão pessoal",           pergunta: "Por que faz sentido que o primeiro modelo fosse tão simples? O que Dalton tinha de diferente dos filósofos gregos que já falavam em átomos antes dele?", tipo: "texto", linhas: 3 },
+    ]
+  },
+  {
+    id: "thomson", nome: "Thomson", emoji: "🟡", cor: "#784212",
+    secoes: [
+      { id: "contexto",    titulo: "1. Contexto histórico",            pergunta: "O que estava acontecendo na ciência quando Thomson fez sua descoberta? Que tipo de experimento estava sendo feito na época?",       tipo: "texto", linhas: 3 },
+      { id: "experimento", titulo: "2. O experimento do tubo catódico",pergunta: "Explique com suas palavras: o que Thomson usou, o que observou e o que concluiu.",                                                  tipo: "texto", linhas: 4 },
+      { id: "descoberta",  titulo: "3. A grande descoberta",           pergunta: "O que Thomson descobriu que Dalton não sabia? Como isso mudou tudo?",                                                               tipo: "texto", linhas: 3 },
+      { id: "modelo",      titulo: "4. Como Thomson imaginava o átomo",pergunta: "Onde ficavam os elétrons? E a carga positiva? Como o átomo era neutro?",                                                           tipo: "texto", linhas: 3 },
+      { id: "limitacao",   titulo: "5. A grande limitação",            pergunta: "O modelo de Thomson não conseguia explicar o quê? O que ele deixou em aberto?",                                                    tipo: "texto", linhas: 2 },
+      { id: "apelido",     titulo: "6. Apelido do modelo",             pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                             tipo: "texto", linhas: 2 },
+      { id: "conexao",     titulo: "7. Conexão pessoal",               pergunta: "O raio no experimento se desviou para a placa positiva. Por que isso prova que o elétron tem carga negativa? Explique o raciocínio.", tipo: "texto", linhas: 3 },
+    ]
+  },
+  {
+    id: "rutherford", nome: "Rutherford", emoji: "🔴", cor: "#7B241C",
+    secoes: [
+      { id: "contexto",    titulo: "1. Contexto histórico",           pergunta: "Rutherford foi aluno de Thomson. Como um modelo levou ao outro? O que motivou o experimento?",                                                   tipo: "texto", linhas: 3 },
+      { id: "experimento", titulo: "2. O experimento da folha de ouro",pergunta: "O que Rutherford bombardeou, com o quê, o que esperava encontrar e o que de fato aconteceu?",                                                   tipo: "texto", linhas: 4 },
+      { id: "trajetorias", titulo: "3. As três trajetórias",           pergunta: "Explique o que aconteceu com cada grupo de partículas alfa e o que isso revelou sobre a estrutura do átomo:",                                   tipo: "trajetorias", itens: ["Maioria das partículas", "Algumas partículas", "Poucas partículas (voltaram)"] },
+      { id: "descoberta",  titulo: "4. A grande descoberta",           pergunta: "O que Rutherford concluiu? Descreva o modelo: onde fica o núcleo, onde ficam os elétrons e qual a proporção de tamanho.",                       tipo: "texto", linhas: 3 },
+      { id: "limitacao",   titulo: "5. A grande limitação",            pergunta: "Pela física clássica, o que deveria acontecer com um elétron girando em volta do núcleo? Por que isso era um problema sério?",                  tipo: "texto", linhas: 3 },
+      { id: "apelido",     titulo: "6. Apelido do modelo",             pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                                           tipo: "texto", linhas: 2 },
+      { id: "conexao",     titulo: "7. Conexão pessoal",               pergunta: "Rutherford disse que foi como 'atirar uma bala num papel de seda e ela voltar e te acertar'. O que ele quis dizer com isso?",                   tipo: "texto", linhas: 3 },
+    ]
+  },
+  {
+    id: "bohr", nome: "Bohr", emoji: "🟢", cor: "#145A32",
+    secoes: [
+      { id: "contexto",     titulo: "1. Contexto histórico",        pergunta: "Bohr foi trabalhar no laboratório de Rutherford. Que problema urgente ele precisava resolver?",                                                     tipo: "texto",  linhas: 3 },
+      { id: "ideia",        titulo: "2. A ideia revolucionária",     pergunta: "O que Bohr propôs que nenhum cientista anterior havia pensado? O que são os níveis de energia (camadas eletrônicas)?",                             tipo: "texto",  linhas: 3 },
+      { id: "salto",        titulo: "3. O salto quântico",           pergunta: "O que acontece com o elétron quando absorve energia? E quando libera? O que é emitido nesse processo?",                                            tipo: "texto",  linhas: 3 },
+      { id: "cores",        titulo: "4. Por que explica as cores",   pergunta: "Diferentes elementos emitem cores diferentes na chama. Por que o modelo de Bohr explica isso e os anteriores não conseguiam?",                    tipo: "texto",  linhas: 3 },
+      { id: "distribuicao", titulo: "5. Distribuição eletrônica",    pergunta: "Quantos elétrons cabem em cada camada? Preencha e depois distribua os elétrons do Sódio (Na, Z=11) e do Cloro (Cl, Z=17):",                      tipo: "camadas" },
+      { id: "limitacao",    titulo: "6. A grande limitação",         pergunta: "O modelo de Bohr foi um grande avanço, mas o que ele não conseguia explicar — especialmente para átomos maiores?",                                tipo: "texto",  linhas: 2 },
+      { id: "conexao",      titulo: "7. Conexão pessoal",            pergunta: "O modelo de Bohr ainda é ensinado no ensino médio mesmo não sendo o mais moderno. Por que você acha que isso acontece?",                          tipo: "texto",  linhas: 3 },
+    ]
+  },
+];
+
+const QUADRO_FINAL = {
+  titulo: "📋 Quadro Final — Evolução dos Modelos",
+  linhas: ["Dalton", "Thomson", "Rutherford", "Bohr"],
+  reflexao: "A ciência avança errando e corrigindo. O que a história dos modelos atômicos ensina sobre como o conhecimento científico funciona? Escreva com suas palavras."
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   🗂️  ESTADO DO APP
+   ══════════════════════════════════════════════════════════════════ */
+let db, refGrupo;
+let state = {
+  nome: "", turma: "", grupo: "", modeloPrincipal: "",
+  modeloIdx: 0, secaoIdx: 0,
+  answers: {}  // chave: "modeloId/secaoId/campo"  valor: string
+};
+let saveTimer = null;
+let listener = null;
+
+/* ══════════════════════════════════════════════════════════════════
+   🚀 INICIALIZAÇÃO
+   ══════════════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.database();
+  } catch(e) {}
+  document.getElementById('loading').classList.add('hidden');
+  mostrarTela('home');
+});
+
+function mostrarTela(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   🔑 ENTRAR
+   ══════════════════════════════════════════════════════════════════ */
+function entrar() {
+  const nome   = document.getElementById('input-nome').value.trim();
+  const turma  = document.getElementById('input-turma').value.trim().toUpperCase();
+  const grupo  = document.getElementById('input-grupo').value.trim();
+  const modelo = document.getElementById('input-modelo').value;
+  const err    = document.getElementById('home-error');
+
+  if (!nome || !turma || !grupo || !modelo) {
+    err.textContent = "Preencha todos os campos antes de continuar.";
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  state.nome   = nome;
+  state.turma  = turma;
+  state.grupo  = grupo;
+  state.modeloPrincipal = modelo;
+  state.modeloIdx = MODELOS.findIndex(m => m.id === modelo);
+  if (state.modeloIdx < 0) state.modeloIdx = 0;
+  state.secaoIdx = 0;
+
+  const chave = `turma_${turma}/grupo_${grupo}`;
+  refGrupo = db.ref(`dossies/${chave}`);
+
+  // Escuta mudanças em tempo real
+  if (listener) listener();
+  listener = refGrupo.on('value', snap => {
+    const data = snap.val() || {};
+    const novas = data.respostas || {};
+    // Só atualiza campos que não estão focados agora
+    Object.entries(novas).forEach(([k, v]) => {
+      if (state.answers[k] !== v) {
+        state.answers[k] = v;
+        const el = document.querySelector(`[data-key="${k}"]`);
+        if (el && document.activeElement !== el) el.value = v;
+      }
+    });
+    atualizarUI();
+  });
+
+  // Abre tela do app
+  mostrarTela('app');
+  document.getElementById('h-grupo').textContent = `Turma ${turma} · Grupo ${grupo}`;
+  document.getElementById('h-turma-nome').textContent = nome;
+  renderModelTabs();
+  renderSection();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   💾 SALVAR
+   ══════════════════════════════════════════════════════════════════ */
+function salvar(campo, valor) {
+  state.answers[campo] = valor;
+  setSyncStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    refGrupo.update({ respostas: state.answers })
+      .then(() => setSyncStatus('ok'))
+      .catch(() => setSyncStatus('error'));
+  }, 600);
+}
+
+function setSyncStatus(s) {
+  const dot  = document.getElementById('sync-dot');
+  const text = document.getElementById('sync-text');
+  if (s === 'saving') { dot.className = 'sync-dot saving'; text.textContent = 'Salvando...'; }
+  else if (s === 'ok') { dot.className = 'sync-dot'; text.textContent = 'Salvo ✓'; }
+  else { dot.className = 'sync-dot saving'; text.textContent = 'Erro de conexão'; }
+}
+
+function getVal(modeloId, secaoId, campo) {
+  return state.answers[`${modeloId}/${secaoId}/${campo}`] || '';
+}
+function setVal(modeloId, secaoId, campo, valor) {
+  salvar(`${modeloId}/${secaoId}/${campo}`, valor);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   🎨 RENDER
+   ══════════════════════════════════════════════════════════════════ */
+function renderModelTabs() {
+  const tabs = document.getElementById('model-tabs');
+  tabs.innerHTML = MODELOS.map((m, i) => `
+    <button class="model-tab ${i === state.modeloIdx ? 'active' : ''}"
+      style="${i === state.modeloIdx ? `background:${m.cor}` : ''}"
+      onclick="irModelo(${i})">
+      ${m.emoji} ${m.nome}
+    </button>
+  `).join('') + `
+    <button class="model-tab ${state.modeloIdx === 4 ? 'active' : ''}"
+      style="${state.modeloIdx === 4 ? 'background:#4A235A' : ''}"
+      onclick="irModelo(4)">
+      📋 Final
+    </button>`;
+}
+
+function renderSection() {
+  const modelo = MODELOS[state.modeloIdx];
+  if (!modelo) { renderFinal(); return; }
+
+  const secao = modelo.secoes[state.secaoIdx];
+  const header = document.getElementById('app-header');
+  header.style.background = modelo.cor;
+
+  // Dots
+  const dots = document.getElementById('section-dots');
+  dots.innerHTML = modelo.secoes.map((_, i) => {
+    const preenchida = temResposta(modelo.id, modelo.secoes[i].id);
+    return `<div class="section-dot ${i === state.secaoIdx ? 'active' : ''} ${preenchida ? 'filled' : ''}"
+      style="${i === state.secaoIdx ? `background:${modelo.cor}` : preenchida ? `background:${modelo.cor}` : ''}"
+      onclick="irSecao(${i})"></div>`;
+  }).join('');
+
+  // Botão prev
+  document.getElementById('btn-prev').style.display =
+    (state.modeloIdx === 0 && state.secaoIdx === 0) ? 'none' : 'block';
+
+  // Botão next
+  const btn = document.getElementById('btn-next');
+  const isLast = state.modeloIdx === MODELOS.length - 1 && state.secaoIdx === modelo.secoes.length - 1;
+  btn.style.background = isLast ? '#4A235A' : modelo.cor;
+  btn.textContent = isLast ? '📋 Ir para o Quadro Final →' : 'Próxima seção →';
+
+  // Body
+  const body = document.getElementById('form-body');
+  body.innerHTML = `
+    <h2 class="section-titulo" style="color:${modelo.cor}">${secao.titulo}</h2>
+    <p class="section-pergunta">${secao.pergunta}</p>
+    ${renderCampo(modelo, secao)}
+  `;
+
+  atualizarProgresso();
+}
+
+function renderCampo(modelo, secao) {
+  const mid = modelo.id, sid = secao.id;
+
+  if (secao.tipo === 'texto') {
+    const val = getVal(mid, sid, 'main');
+    return `<textarea rows="${secao.linhas + 1}" data-key="${mid}/${sid}/main"
+      oninput="setVal('${mid}','${sid}','main',this.value)"
+      placeholder="Escreva sua resposta aqui...">${val}</textarea>`;
+
+}
+
+if (secao.tipo === ‘lista’) {
+return secao.itens.map((item, i) => {
+const val = getVal(mid, sid, `item_${i}`);
+return `<div class="bullet-row"> <span class="bullet-label" style="color:${modelo.cor}">${item}:</span> <input class="answer-input" data-key="${mid}/${sid}/item_${i}" type="text" value="${escHtml(val)}" placeholder="..." oninput="setVal('${mid}','${sid}','item_${i}',this.value)"> </div>`;
+}).join(’’);
+}
+
+if (secao.tipo === ‘trajetorias’) {
+return secao.itens.map((item, i) => {
+const vO = getVal(mid, sid, `t${i}_o`);
+const vP = getVal(mid, sid, `t${i}_p`);
+return `<div class="traj-card"> <div class="traj-header" style="background:${modelo.cor}">${item}</div> <div class="traj-body"> <span class="traj-label">O que aconteceu:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}_o" oninput="setVal('${mid}','${sid}','t${i}_o',this.value)" placeholder="...">${vO}</textarea> <span class="traj-label">O que isso prova:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}_p" oninput="setVal('${mid}','${sid}','t${i}_p',this.value)" placeholder="...">${vP}</textarea> </div> </div>`;
+}).join(’’);
+}
+
+if (secao.tipo === ‘camadas’) {
+const camadas = [‘K’,‘L’,‘M’,‘N’];
+const elementos = [
+{ nome: ‘Sódio (Na, Z=11)’,  cams: [‘K’,‘L’,‘M’] },
+{ nome: ‘Cloro (Cl, Z=17)’, cams: [‘K’,‘L’,‘M’] },
+];
+let html = `<p style="font-size:14px;font-weight:700;color:#555;margin-bottom:10px">Máximo de elétrons por camada:</p> <div class="camadas-grid">`;
+camadas.forEach(c => {
+const v = getVal(mid, sid, `cam_${c}`);
+html += `<div class="camada-box"> <div class="camada-circle" style="background:${modelo.cor}">${c}</div> <input class="camada-input" data-key="${mid}/${sid}/cam_${c}" type="text" value="${escHtml(v)}" placeholder="máx" oninput="setVal('${mid}','${sid}','cam_${c}',this.value)"> </div>`;
+});
+html += `</div> <p style="font-size:14px;font-weight:700;color:#555;margin:14px 0 8px">Distribuição eletrônica:</p>`;
+elementos.forEach((el, ei) => {
+html += `<div class="elemento-card"> <div class="elemento-nome" style="color:${modelo.cor}">${el.nome}</div> <div class="elemento-row">`;
+el.cams.forEach(c => {
+const v = getVal(mid, sid, `el_${ei}_${c}`);
+html += `<div class="camada-box"> <div class="camada-circle" style="background:${modelo.cor};width:40px;height:40px;font-size:15px">${c}</div> <input class="camada-input" data-key="${mid}/${sid}/el_${ei}_${c}" type="text" value="${escHtml(v)}" placeholder="e⁻" oninput="setVal('${mid}','${sid}','el_${ei}_${c}',this.value)"> </div>`;
+});
+html += `</div></div>`;
+});
+return html;
+}
+
+return ‘’;
+}
+
+function renderFinal() {
+state.modeloIdx = 4;
+const header = document.getElementById(‘app-header’);
+header.style.background = ‘#4A235A’;
+document.getElementById(‘section-dots’).innerHTML = ‘’;
+document.getElementById(‘btn-prev’).style.display = ‘block’;
+
+const btn = document.getElementById(‘btn-next’);
+btn.style.background = ‘#145A32’;
+btn.textContent = ‘✅ Concluir Dossiê’;
+
+const body = document.getElementById(‘form-body’);
+let html = `<h2 class="section-titulo" style="color:#4A235A">${QUADRO_FINAL.titulo}</h2>
+
+  <p class="section-pergunta">Preencha este quadro depois de pesquisar todos os modelos. Ele é o mapa mais útil do seu grupo no dia do jogo.</p>`;
+
+QUADRO_FINAL.linhas.forEach(row => {
+const vR = getVal(‘final’, row, ‘resolveu’);
+const vL = getVal(‘final’, row, ‘deixou’);
+html += `<div class="final-card"> <div class="final-card-header" style="background:${corDoModelo(row)}">${emojiDoModelo(row)} ${row}</div> <div class="final-card-body"> <span class="final-field-label">O que resolveu do modelo anterior:</span> <textarea rows="2" data-key="final/${row}/resolveu" oninput="setVal('final','${row}','resolveu',this.value)" placeholder="...">${vR}</textarea> <span class="final-field-label">O que deixou sem resposta:</span> <textarea rows="2" data-key="final/${row}/deixou" oninput="setVal('final','${row}','deixou',this.value)" placeholder="...">${vL}</textarea> </div> </div>`;
+});
+
+const vRef = getVal(‘final’, ‘reflexao’, ‘main’);
+html += `<h3 class="section-titulo" style="color:#4A235A;margin-top:20px">Reflexão final</h3>
+
+  <p class="section-pergunta">${QUADRO_FINAL.reflexao}</p>
+  <textarea rows="5" data-key="final/reflexao/main"
+    oninput="setVal('final','reflexao','main',this.value)"
+    placeholder="Escreva com suas palavras...">${vRef}</textarea>`;
+
+body.innerHTML = html;
+atualizarProgresso();
+renderModelTabs();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+🧭 NAVEGAÇÃO
+══════════════════════════════════════════════════════════════════ */
+function irModelo(idx) {
+state.modeloIdx = idx;
+state.secaoIdx = 0;
+renderModelTabs();
+if (idx === 4) renderFinal();
+else renderSection();
+}
+
+function irSecao(idx) {
+state.secaoIdx = idx;
+renderSection();
+renderModelTabs();
+}
+
+function nextSection() {
+const modelo = MODELOS[state.modeloIdx];
+if (!modelo) { concluir(); return; }
+if (state.secaoIdx < modelo.secoes.length - 1) {
+state.secaoIdx++;
+renderSection();
+} else if (state.modeloIdx < MODELOS.length - 1) {
+state.modeloIdx++;
+state.secaoIdx = 0;
+renderModelTabs();
+renderSection();
+} else {
+renderFinal();
+renderModelTabs();
+}
+}
+
+function prevSection() {
+if (state.modeloIdx === 4) {
+state.modeloIdx = MODELOS.length - 1;
+state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;
+renderModelTabs();
+renderSection();
+return;
+}
+if (state.secaoIdx > 0) {
+state.secaoIdx–;
+renderSection();
+} else if (state.modeloIdx > 0) {
+state.modeloIdx–;
+state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;
+renderModelTabs();
+renderSection();
+}
+}
+
+function concluir() {
+document.getElementById(‘done-grupo-nome’).textContent =
+`Turma ${state.turma} · Grupo ${state.grupo}`;
+mostrarTela(‘done’);
+}
+
+function voltarApp() {
+mostrarTela(‘app’);
+renderModelTabs();
+renderSection();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+📊 PROGRESSO
+══════════════════════════════════════════════════════════════════ */
+function temResposta(modeloId, secaoId) {
+const prefix = `${modeloId}/${secaoId}/`;
+return Object.keys(state.answers).some(k => k.startsWith(prefix) && state.answers[k].trim());
+}
+
+function atualizarProgresso() {
+let preenchidas = 0;
+const total = MODELOS.reduce((s, m) => s + m.secoes.length, 0) + QUADRO_FINAL.linhas.length + 1;
+MODELOS.forEach(m => m.secoes.forEach(s => { if (temResposta(m.id, s.id)) preenchidas++; }));
+QUADRO_FINAL.linhas.forEach(row => { if (getVal(‘final’, row, ‘resolveu’).trim()) preenchidas++; });
+if (getVal(‘final’, ‘reflexao’, ‘main’).trim()) preenchidas++;
+document.getElementById(‘progress-fill’).style.width = Math.round(preenchidas / total * 100) + ‘%’;
+}
+
+function atualizarUI() {
+renderModelTabs();
+atualizarProgresso();
+// Reatualizar campos da seção atual
+document.querySelectorAll(’[data-key]’).forEach(el => {
+if (document.activeElement !== el) {
+const v = state.answers[el.dataset.key] || ‘’;
+if (el.value !== v) el.value = v;
+}
+});
+}
+
+/* ══════════════════════════════════════════════════════════════════
+📄 GERAR PDF
+══════════════════════════════════════════════════════════════════ */
+function gerarPDF() {
+const area = document.getElementById(‘print-area’);
+let html = ` <div class="print-cover"> <h1>⚛️ Dossiê Científico</h1> <p class="sub">Modelos Atômicos — 1º Ano do Ensino Médio</p> <div class="group-box"> <p>Turma: <strong>${escHtml(state.turma)}</strong></p> <p>Grupo: <strong>${escHtml(state.grupo)}</strong></p> <p style="font-size:11px;margin-top:6px;color:#777">Gerado em ${new Date().toLocaleDateString('pt-BR')}</p> </div> </div>`;
+
+MODELOS.forEach((modelo, mi) => {
+if (mi > 0) html += `<div class="print-page-break"></div>`;
+html += `<div class="print-model"> <div class="print-model-header" style="background:${modelo.cor}">${modelo.emoji} Modelo de ${modelo.nome}</div>`;
+
+```
+modelo.secoes.forEach(secao => {
+  html += `<div class="print-section">
+    <div class="print-section-title">${secao.titulo}</div>
+    <div class="print-question">${secao.pergunta}</div>`;
+
+  if (secao.tipo === 'texto') {
+    const v = getVal(modelo.id, secao.id, 'main');
+    html += `<div class="print-answer">${escHtml(v) || '(sem resposta)'}</div>`;
+  }
+
+  if (secao.tipo === 'lista') {
+    html += `<table class="print-table"><tbody>`;
+    secao.itens.forEach((item, i) => {
+      const v = getVal(modelo.id, secao.id, `item_${i}`);
+      html += `<tr><th style="width:120px">${item}</th><td>${escHtml(v) || '—'}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  if (secao.tipo === 'trajetorias') {
+    html += `<table class="print-table"><thead><tr><th>Trajetória</th><th>O que aconteceu</th><th>O que isso prova</th></tr></thead><tbody>`;
+    secao.itens.forEach((item, i) => {
+      const vO = getVal(modelo.id, secao.id, `t${i}_o`);
+      const vP = getVal(modelo.id, secao.id, `t${i}_p`);
+      html += `<tr><td><strong>${item}</strong></td><td>${escHtml(vO)||'—'}</td><td>${escHtml(vP)||'—'}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  if (secao.tipo === 'camadas') {
+    const camadas = ['K','L','M','N'];
+    html += `<table class="print-table"><thead><tr><th>Camada</th>${camadas.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+    html += `<tr><td>Máximo de e⁻</td>${camadas.map(c=>`<td>${escHtml(getVal(modelo.id,secao.id,`cam_${c}`))||'—'}</td>`).join('')}</tr>`;
+    const els = [{nome:'Sódio (Na, Z=11)',ei:0},{nome:'Cloro (Cl, Z=17)',ei:1}];
+    els.forEach(({nome,ei}) => {
+      html += `<tr><td>${nome}</td>${['K','L','M'].map(c=>`<td>${escHtml(getVal(modelo.id,secao.id,`el_${ei}_${c}`))||'—'}</td>`).join('')}<td>—</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  html += `</div>`;
+});
+html += `</div>`;
+```
+
+});
+
+// Quadro final
+html += `<div class="print-page-break"></div>
+
+  <div class="print-final-section">
+    <div class="print-model-header" style="background:#4A235A">📋 Quadro Final — Evolução dos Modelos</div>
+    <table class="print-table">
+      <thead><tr><th>Modelo</th><th>O que resolveu</th><th>O que deixou sem resposta</th></tr></thead>
+      <tbody>`;
+  QUADRO_FINAL.linhas.forEach(row => {
+    const vR = getVal('final', row, 'resolveu');
+    const vL = getVal('final', row, 'deixou');
+    html += `<tr><td><strong>${row}</strong></td><td>${escHtml(vR)||'—'}</td><td>${escHtml(vL)||'—'}</td></tr>`;
+  });
+  html += `</tbody></table>
+    <div class="print-section" style="margin-top:16px">
+      <div class="print-section-title">Reflexão final</div>
+      <div class="print-question">${QUADRO_FINAL.reflexao}</div>
+      <div class="print-answer">${escHtml(getVal('final','reflexao','main'))||'(sem resposta)'}</div>
+    </div>
+  </div>`;
+
+area.innerHTML = html;
+setTimeout(() => window.print(), 200);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+🛠️  UTILITÁRIOS
+══════════════════════════════════════════════════════════════════ */
+function corDoModelo(nome) {
+const m = MODELOS.find(x => x.nome === nome);
+return m ? m.cor : ‘#333’;
+}
+function emojiDoModelo(nome) {
+const m = MODELOS.find(x => x.nome === nome);
+return m ? m.emoji : ‘▪️’;
+}
+function escHtml(str) {
+if (!str) return ‘’;
+return str.replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’);
+}
+</script>
+
+</body>
+</html>
