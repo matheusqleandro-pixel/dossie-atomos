@@ -1,0 +1,1293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px 'Helvetica Neue'; color: #155b23; -webkit-text-stroke: #155b23}
+    span.s1 {font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: 0px #000000}
+    span.s2 {font-kerning: none; background-color: rgba(0, 0, 0, 0.039)}
+    span.s3 {font: 14.0px 'Helvetica Neue'; font-kerning: none; color: #155b23; background-color: rgba(0, 0, 0, 0.039); -webkit-text-stroke: 0px #155b23}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;html lang="pt-BR"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;Dossiê Científico — Modelos Atômicos&lt;/title&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ═══════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">     </span>FIREBASE — Cole aqui as suas credenciais (ver instruções)</p>
+<p class="p1"><span class="Apple-converted-space">     </span>═══════════════════════════════════════════════════════════════ --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">/* ── RESET &amp; BASE ───────────────────────────────────────────────── */</p>
+<p class="p1">*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }</p>
+<p class="p2"><br></p>
+<p class="p1">:root {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--dalton:<span class="Apple-converted-space">    </span>#1A5276;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--thomson: <span class="Apple-converted-space">  </span>#784212;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--ruther:<span class="Apple-converted-space">    </span>#7B241C;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--bohr:<span class="Apple-converted-space">      </span>#145A32;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--final: <span class="Apple-converted-space">    </span>#4A235A;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--bg:<span class="Apple-converted-space">        </span>#0d1b2a;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--card:<span class="Apple-converted-space">      </span>#ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--text:<span class="Apple-converted-space">      </span>#1a1a1a;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--muted: <span class="Apple-converted-space">    </span>#666;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--border:<span class="Apple-converted-space">    </span>#e0e0e0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--radius:<span class="Apple-converted-space">    </span>14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--shadow:<span class="Apple-converted-space">    </span>0 8px 40px rgba(0,0,0,0.35);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">body {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background-image:</p>
+<p class="p1"><span class="Apple-converted-space">    </span>radial-gradient(ellipse at 20% 20%, rgba(26,82,118,0.3) 0%, transparent 50%),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>radial-gradient(ellipse at 80% 80%, rgba(20,90,50,0.2) 0%, transparent 50%);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── SCREENS ────────────────────────────────────────────────────── */</p>
+<p class="p1">.screen { display: none; }</p>
+<p class="p1">.screen.active { display: flex; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── HOME SCREEN ────────────────────────────────────────────────── */</p>
+<p class="p1">#screen-home {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 24px 16px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.home-card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 44px 36px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-width: 460px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: var(--shadow);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.home-atom { font-size: 56px; text-align: center; margin-bottom: 8px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.home-title {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Lora', serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 28px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 4px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.home-sub {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 28px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.divider {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 50px; height: 3px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #2E86C1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 2px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin: 0 auto 28px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.field-group { margin-bottom: 18px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.field-group label {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #444;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 7px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.field-group input,</p>
+<p class="p1">.field-group select {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 13px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: border 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #fff;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.field-group input:focus,</p>
+<p class="p1">.field-group select:focus { border-color: #2E86C1; }</p>
+<p class="p2"><br></p>
+<p class="p1">.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }</p>
+<p class="p2"><br></p>
+<p class="p1">.home-note {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #EBF5FB;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-left: 4px solid #2E86C1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 12px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 0 8px 8px 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #1A5276;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 22px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-primary {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 17px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Lora', serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing: 0.3px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: background 0.2s, transform 0.1s;</p>
+<p class="p1">}</p>
+<p class="p1">.btn-primary:hover { background: #1F4E79; }</p>
+<p class="p1">.btn-primary:active { transform: scale(0.98); }</p>
+<p class="p2"><br></p>
+<p class="p1">.error-msg {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #C0392B;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top: -10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── MAIN APP SCREEN ────────────────────────────────────────────── */</p>
+<p class="p1">#screen-app {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 0 0 60px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.app-wrapper {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-width: 680px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: var(--shadow);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Header */</p>
+<p class="p1">.app-header {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 16px 20px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: sticky;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>z-index: 100;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: background 0.3s;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.header-row1 {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 10px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.header-group-info {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.9;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.4;</p>
+<p class="p1">}</p>
+<p class="p1">.header-group-info strong { font-size: 15px; display: block; }</p>
+<p class="p2"><br></p>
+<p class="p1">.sync-badge {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 4px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(255,255,255,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>white-space: nowrap;</p>
+<p class="p1">}</p>
+<p class="p1">.sync-dot {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 8px; height: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #2ECC71;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>animation: pulse 2s infinite;</p>
+<p class="p1">}</p>
+<p class="p1">.sync-dot.saving { background: #F39C12; animation: none; }</p>
+<p class="p2"><br></p>
+<p class="p1">@keyframes pulse {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>0%, 100% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>50% { opacity: 0.4; }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.progress-bar-bg {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(255,255,255,0.25);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 3px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
+<p class="p1">}</p>
+<p class="p1">.progress-bar-fill {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 3px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: width 0.4s ease;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: rgba(255,255,255,0.7);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Model tabs */</p>
+<p class="p1">.model-tabs {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #f4f4f4;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow-x: auto;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>-webkit-overflow-scrolling: touch;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>scrollbar-width: none;</p>
+<p class="p1">}</p>
+<p class="p1">.model-tabs::-webkit-scrollbar { display: none; }</p>
+<p class="p2"><br></p>
+<p class="p1">.model-tab {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 8px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>white-space: nowrap;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>opacity: 0.6;</p>
+<p class="p1">}</p>
+<p class="p1">.model-tab.active { opacity: 1; color: #fff; }</p>
+<p class="p1">.model-tab.partial { opacity: 0.85; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Section nav */</p>
+<p class="p1">.section-nav {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-bottom: 1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #fafafa;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.section-dots {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 6px;</p>
+<p class="p1">}</p>
+<p class="p1">.section-dot {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 9px; height: 9px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: background 0.2s, transform 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">.section-dot.active { transform: scale(1.3); }</p>
+<p class="p1">.section-dot.filled { opacity: 0.7; }</p>
+<p class="p2"><br></p>
+<p class="p1">.nav-btn {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 6px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1">}</p>
+<p class="p1">.nav-btn:hover { border-color: #aaa; color: #333; }</p>
+<p class="p1">.nav-btn.next-model { color: #fff; border: none; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* Form body */</p>
+<p class="p1">.form-body {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 24px 20px 32px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.section-titulo {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Lora', serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 17px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 8px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.section-pergunta {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #444;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.65;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">textarea, .answer-input {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 12px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>resize: vertical;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height: 1.6;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: border 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">textarea:focus, .answer-input:focus { border-color: #2E86C1; }</p>
+<p class="p2"><br></p>
+<p class="p1">.bullet-row {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 10px;</p>
+<p class="p1">}</p>
+<p class="p1">.bullet-label {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-width: 95px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>white-space: nowrap;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.traj-card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 14px;</p>
+<p class="p1">}</p>
+<p class="p1">.traj-header {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1">}</p>
+<p class="p1">.traj-body { padding: 12px 16px; }</p>
+<p class="p1">.traj-label {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.camadas-grid {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-wrap: wrap;</p>
+<p class="p1">}</p>
+<p class="p1">.camada-box {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 6px;</p>
+<p class="p1">}</p>
+<p class="p1">.camada-circle {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 46px; height: 46px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1">}</p>
+<p class="p1">.camada-input {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 60px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 8px 6px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>outline: none;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.elemento-card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #f9f9f9;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 14px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 12px;</p>
+<p class="p1">}</p>
+<p class="p1">.elemento-nome {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 10px;</p>
+<p class="p1">}</p>
+<p class="p1">.elemento-row {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-wrap: wrap;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Bottom bar */</p>
+<p class="p1">.bottom-bar {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: sticky;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>bottom: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-top: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 12px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-pdf {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 11px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.2s;</p>
+<p class="p1">}</p>
+<p class="p1">.btn-pdf:hover { background: #EBF5FB; }</p>
+<p class="p2"><br></p>
+<p class="p1">.btn-advance {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 11px 22px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Source Sans 3', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition: all 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-width: 280px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* Final screen */</p>
+<p class="p1">.final-card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border: 2px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 16px;</p>
+<p class="p1">}</p>
+<p class="p1">.final-card-header {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #fff;</p>
+<p class="p1">}</p>
+<p class="p1">.final-card-body { padding: 14px 16px; }</p>
+<p class="p1">.final-field-label {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: block;</p>
+<p class="p1">}</p>
+<p class="p1">.final-field-label:first-child { margin-top: 0; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── PRINT / PDF ────────────────────────────────────────────────── */</p>
+<p class="p1">#print-area {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: none;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">@media print {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body &gt; *:not(#print-area) { display: none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>#print-area {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display: block !important;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-family: 'Source Sans 3', Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color: #000;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 60px 40px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border-bottom: 3px solid #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>page-break-after: always;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover h1 {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-family: 'Lora', Georgia, serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 28px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color: #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-bottom: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover .sub { font-size: 16px; color: #555; margin-bottom: 24px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover .group-box {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>display: inline-block;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border: 2px solid #1A3A5C;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 14px 32px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover .group-box p { margin: 2px 0; font-size: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-cover .group-box strong { font-size: 18px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-model { page-break-inside: avoid; margin-bottom: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-model-header {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 10px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-bottom: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>page-break-after: avoid;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-section { margin-bottom: 16px; page-break-inside: avoid; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-section-title {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-bottom: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-question {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 11px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>color: #555;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>margin-bottom: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-style: italic;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-answer {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>background: #f9f9f9;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border-radius: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 8px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>min-height: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>white-space: pre-wrap;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>word-break: break-word;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>line-height: 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-page-break { page-break-before: always; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-table th, .print-table td {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>border: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>padding: 6px 8px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>font-size: 11px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>vertical-align: top;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-table th { background: #eee; font-weight: 700; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.print-final-section { margin-top: 24px; page-break-inside: avoid; }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── LOADING OVERLAY ─────────────────────────────────────────────── */</p>
+<p class="p1">#loading {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position: fixed; inset: 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>z-index: 9999;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap: 16px;</p>
+<p class="p1">}</p>
+<p class="p1">#loading .spin {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 48px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>animation: spin 1.5s linear infinite;</p>
+<p class="p1">}</p>
+<p class="p1">@keyframes spin { to { transform: rotate(360deg); } }</p>
+<p class="p1">#loading p { color: #fff; font-size: 16px; }</p>
+<p class="p1">#loading.hidden { display: none; }</p>
+<p class="p2"><br></p>
+<p class="p1">/* ── DONE SCREEN ─────────────────────────────────────────────────── */</p>
+<p class="p1">#screen-done {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 24px;</p>
+<p class="p1">}</p>
+<p class="p1">.done-card {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 48px 32px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-width: 420px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>box-shadow: var(--shadow);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1">}</p>
+<p class="p1">.done-icon { font-size: 64px; margin-bottom: 16px; }</p>
+<p class="p1">.done-title {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: 'Lora', serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 26px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color: #145A32;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 10px;</p>
+<p class="p1">}</p>
+<p class="p1">.done-sub { font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 24px; }</p>
+<p class="p1">.done-box {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background: #D5F5E3;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 16px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom: 24px;</p>
+<p class="p1">}</p>
+<p class="p1">.done-box p { color: #1E8449; font-size: 14px; line-height: 1.5; }</p>
+<p class="p1">.done-box strong { font-size: 18px; display: block; margin-bottom: 4px; color: #145A32; }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ── LOADING ─────────────────────────────────────────────────────── --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="loading"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="spin"&gt;⚛️&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;Conectando...&lt;/p&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ── HOME ───────────────────────────────────────────────────────── --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="screen-home" class="screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="home-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="home-atom"&gt;⚛️&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 class="home-title"&gt;Dossiê Científico&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="home-sub"&gt;Modelos Atômicos · 1º Ano do Ensino Médio&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="divider"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">```</p>
+<p class="p1">&lt;div class="field-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;label&gt;Seu nome completo&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="text" id="input-nome" placeholder="Ex: Ana Paula Silva" autocomplete="off"&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="row-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="field-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Turma&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="input-turma" placeholder="Ex: 1A" autocomplete="off" maxlength="4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="field-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;label&gt;Número do grupo&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="number" id="input-grupo" placeholder="Ex: 3" min="1" max="30"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="field-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;label&gt;Modelo que você vai pesquisar&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;select id="input-modelo"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value=""&gt;— Escolha o seu modelo —&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="dalton"&gt;🔵 Dalton&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="thomson"&gt;🟡 Thomson&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="rutherford"&gt;🔴 Rutherford&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;option value="bohr"&gt;🟢 Bohr&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/select&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="home-note"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>💡 Cada integrante pesquisa um modelo diferente, mas todos podem navegar pelo dossiê completo do grupo. No final, o grupo gera um PDF único com tudo junto.</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;p class="error-msg" id="home-error" style="display:none"&gt;&lt;/p&gt;</p>
+<p class="p1">&lt;button class="btn-primary" onclick="entrar()"&gt;Entrar no Dossiê →&lt;/button&gt;</p>
+<p class="p1">```</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ── APP ─────────────────────────────────────────────────────────── --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="screen-app" class="screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="app-wrapper"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">```</p>
+<p class="p1">&lt;div class="app-header" id="app-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="header-row1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="header-group-info"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;strong id="h-grupo"&gt;Grupo —&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="h-turma-nome"&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sync-badge" id="sync-badge"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sync-dot" id="sync-dot"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="sync-text"&gt;Conectado&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="progress-bar-bg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="progress-bar-fill" id="progress-fill" style="width:0%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="model-tabs" id="model-tabs"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="section-nav"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="section-dots" id="section-dots"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="nav-btn" id="btn-prev" onclick="prevSection()"&gt;← Anterior&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="form-body" id="form-body"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="bottom-bar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn-pdf" onclick="gerarPDF()"&gt;📄 Gerar PDF do Grupo&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="btn-advance" id="btn-next" onclick="nextSection()"&gt;Próxima seção →&lt;/button&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p1">```</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ── DONE ────────────────────────────────────────────────────────── --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="screen-done" class="screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="done-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="done-icon"&gt;🏆&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2 class="done-title"&gt;Dossiê Completo!&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="done-sub"&gt;Todas as seções foram preenchidas.&lt;br&gt;Agora gere o PDF do grupo e entregue ao professor.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="done-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;strong id="done-grupo-nome"&gt;&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;O PDF conterá as respostas de todos os integrantes do grupo juntas em um único documento.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn-primary" onclick="gerarPDF()"&gt;📄 Gerar PDF do Grupo&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn-pdf" style="width:100%" onclick="voltarApp()"&gt;← Voltar e revisar&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ── PRINT AREA ──────────────────────────────────────────────────── --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="print-area"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>⚙️<span class="Apple-converted-space">  </span>CONFIGURAÇÃO DO FIREBASE</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Cole aqui as credenciais do seu projeto Firebase.</p>
+<p class="p1"><span class="Apple-converted-space">   </span>Instruções: veja o arquivo COMO_CONFIGURAR.txt</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">const FIREBASE_CONFIG = {</p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span>apiKey:<span class="Apple-converted-space">            </span></span><span class="s2">"AIzaSyB3Tzuk3Q0_0GdihjlBGUeA_-XnalyQFWI"</span><span class="s1">,</span></p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span>authDomain:<span class="Apple-converted-space">        </span></span><span class="s2">"dossie-atomos.firebaseapp.com"</span><span class="s1">,</span></p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span>databaseURL: <span class="Apple-converted-space">      </span></span><span class="s2">"https://dossie-atomos-default-rtdb.firebaseio.com"</span><span class="s1">,</span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>projectId: <span class="Apple-converted-space">        </span><span class="s3">"dossie-atomos"</span>,</p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span>storageBucket: <span class="Apple-converted-space">    </span></span><span class="s2">"dossie-atomos.firebasestorage.app"</span><span class="s1">,</span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>messagingSenderId: <span class="s3">"570859054446"</span>,</p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">  </span>appId: <span class="Apple-converted-space">            </span></span><span class="s2">"1:570859054446:web:7f088b30e2533c59514d7f"</span></p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>📚 DADOS DO DOSSIÊ</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">const MODELOS = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>id: "dalton", nome: "Dalton", emoji: "🔵", cor: "#1A5276",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secoes: [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "contexto",<span class="Apple-converted-space">  </span>titulo: "1. Contexto histórico", <span class="Apple-converted-space">      </span>pergunta: "Em que século Dalton desenvolveu seu modelo? O que os cientistas já sabiam sobre a matéria nessa época?",<span class="Apple-converted-space">                                              </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "postulados",titulo: "2. As ideias principais",<span class="Apple-converted-space">      </span>pergunta: "Liste pelo menos 4 postulados (ideias centrais) do modelo de Dalton:",<span class="Apple-converted-space">                                                                                  </span>tipo: "lista", itens: ["Postulado 1", "Postulado 2", "Postulado 3", "Postulado 4"] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "explicava", titulo: "3. O que explicava bem", <span class="Apple-converted-space">      </span>pergunta: "Quais fenômenos ou leis químicas o modelo conseguia justificar?", <span class="Apple-converted-space">                                                                                      </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "limitacao", titulo: "4. A grande limitação",<span class="Apple-converted-space">        </span>pergunta: "O que o modelo não conseguia explicar? O que ficou de fora?",<span class="Apple-converted-space">                                                                                          </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "derrubou",<span class="Apple-converted-space">  </span>titulo: "5. O que derrubou esse modelo",pergunta: "Que descoberta ou experimento mostrou que o modelo estava incompleto?", <span class="Apple-converted-space">                                                                                </span>tipo: "texto", linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "apelido", <span class="Apple-converted-space">  </span>titulo: "6. Apelido do modelo", <span class="Apple-converted-space">        </span>pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",<span class="Apple-converted-space">                                                                                  </span>tipo: "texto", linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "conexao", <span class="Apple-converted-space">  </span>titulo: "7. Conexão pessoal", <span class="Apple-converted-space">          </span>pergunta: "Por que faz sentido que o primeiro modelo fosse tão simples? O que Dalton tinha de diferente dos filósofos gregos que já falavam em átomos antes dele?", tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>id: "thomson", nome: "Thomson", emoji: "🟡", cor: "#784212",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secoes: [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "contexto",<span class="Apple-converted-space">    </span>titulo: "1. Contexto histórico",<span class="Apple-converted-space">            </span>pergunta: "O que estava acontecendo na ciência quando Thomson fez sua descoberta? Que tipo de experimento estava sendo feito na época?", <span class="Apple-converted-space">      </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "experimento", titulo: "2. O experimento do tubo catódico",pergunta: "Explique com suas palavras: o que Thomson usou, o que observou e o que concluiu.",<span class="Apple-converted-space">                                                  </span>tipo: "texto", linhas: 4 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "descoberta",<span class="Apple-converted-space">  </span>titulo: "3. A grande descoberta", <span class="Apple-converted-space">          </span>pergunta: "O que Thomson descobriu que Dalton não sabia? Como isso mudou tudo?", <span class="Apple-converted-space">                                                              </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "modelo",<span class="Apple-converted-space">      </span>titulo: "4. Como Thomson imaginava o átomo",pergunta: "Onde ficavam os elétrons? E a carga positiva? Como o átomo era neutro?", <span class="Apple-converted-space">                                                          </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "limitacao", <span class="Apple-converted-space">  </span>titulo: "5. A grande limitação",<span class="Apple-converted-space">            </span>pergunta: "O modelo de Thomson não conseguia explicar o quê? O que ele deixou em aberto?",<span class="Apple-converted-space">                                                    </span>tipo: "texto", linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "apelido", <span class="Apple-converted-space">    </span>titulo: "6. Apelido do modelo", <span class="Apple-converted-space">            </span>pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?", <span class="Apple-converted-space">                                                            </span>tipo: "texto", linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "conexao", <span class="Apple-converted-space">    </span>titulo: "7. Conexão pessoal", <span class="Apple-converted-space">              </span>pergunta: "O raio no experimento se desviou para a placa positiva. Por que isso prova que o elétron tem carga negativa? Explique o raciocínio.", tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>id: "rutherford", nome: "Rutherford", emoji: "🔴", cor: "#7B241C",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secoes: [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "contexto",<span class="Apple-converted-space">    </span>titulo: "1. Contexto histórico", <span class="Apple-converted-space">          </span>pergunta: "Rutherford foi aluno de Thomson. Como um modelo levou ao outro? O que motivou o experimento?", <span class="Apple-converted-space">                                                  </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "experimento", titulo: "2. O experimento da folha de ouro",pergunta: "O que Rutherford bombardeou, com o quê, o que esperava encontrar e o que de fato aconteceu?", <span class="Apple-converted-space">                                                  </span>tipo: "texto", linhas: 4 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "trajetorias", titulo: "3. As três trajetórias", <span class="Apple-converted-space">          </span>pergunta: "Explique o que aconteceu com cada grupo de partículas alfa e o que isso revelou sobre a estrutura do átomo:", <span class="Apple-converted-space">                                  </span>tipo: "trajetorias", itens: ["Maioria das partículas", "Algumas partículas", "Poucas partículas (voltaram)"] },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "descoberta",<span class="Apple-converted-space">  </span>titulo: "4. A grande descoberta", <span class="Apple-converted-space">          </span>pergunta: "O que Rutherford concluiu? Descreva o modelo: onde fica o núcleo, onde ficam os elétrons e qual a proporção de tamanho.", <span class="Apple-converted-space">                      </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "limitacao", <span class="Apple-converted-space">  </span>titulo: "5. A grande limitação",<span class="Apple-converted-space">            </span>pergunta: "Pela física clássica, o que deveria acontecer com um elétron girando em volta do núcleo? Por que isso era um problema sério?",<span class="Apple-converted-space">                  </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "apelido", <span class="Apple-converted-space">    </span>titulo: "6. Apelido do modelo", <span class="Apple-converted-space">            </span>pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?", <span class="Apple-converted-space">                                                                          </span>tipo: "texto", linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "conexao", <span class="Apple-converted-space">    </span>titulo: "7. Conexão pessoal", <span class="Apple-converted-space">              </span>pergunta: "Rutherford disse que foi como 'atirar uma bala num papel de seda e ela voltar e te acertar'. O que ele quis dizer com isso?", <span class="Apple-converted-space">                  </span>tipo: "texto", linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>id: "bohr", nome: "Bohr", emoji: "🟢", cor: "#145A32",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secoes: [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "contexto", <span class="Apple-converted-space">    </span>titulo: "1. Contexto histórico",<span class="Apple-converted-space">        </span>pergunta: "Bohr foi trabalhar no laboratório de Rutherford. Que problema urgente ele precisava resolver?", <span class="Apple-converted-space">                                                    </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "ideia",<span class="Apple-converted-space">        </span>titulo: "2. A ideia revolucionária", <span class="Apple-converted-space">    </span>pergunta: "O que Bohr propôs que nenhum cientista anterior havia pensado? O que são os níveis de energia (camadas eletrônicas)?", <span class="Apple-converted-space">                            </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "salto",<span class="Apple-converted-space">        </span>titulo: "3. O salto quântico", <span class="Apple-converted-space">          </span>pergunta: "O que acontece com o elétron quando absorve energia? E quando libera? O que é emitido nesse processo?",<span class="Apple-converted-space">                                            </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "cores",<span class="Apple-converted-space">        </span>titulo: "4. Por que explica as cores", <span class="Apple-converted-space">  </span>pergunta: "Diferentes elementos emitem cores diferentes na chama. Por que o modelo de Bohr explica isso e os anteriores não conseguiam?",<span class="Apple-converted-space">                    </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "distribuicao", titulo: "5. Distribuição eletrônica",<span class="Apple-converted-space">    </span>pergunta: "Quantos elétrons cabem em cada camada? Preencha e depois distribua os elétrons do Sódio (Na, Z=11) e do Cloro (Cl, Z=17):",<span class="Apple-converted-space">                      </span>tipo: "camadas" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "limitacao",<span class="Apple-converted-space">    </span>titulo: "6. A grande limitação", <span class="Apple-converted-space">        </span>pergunta: "O modelo de Bohr foi um grande avanço, mas o que ele não conseguia explicar — especialmente para átomos maiores?",<span class="Apple-converted-space">                                </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 2 },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ id: "conexao",<span class="Apple-converted-space">      </span>titulo: "7. Conexão pessoal",<span class="Apple-converted-space">            </span>pergunta: "O modelo de Bohr ainda é ensinado no ensino médio mesmo não sendo o mais moderno. Por que você acha que isso acontece?",<span class="Apple-converted-space">                          </span>tipo: "texto",<span class="Apple-converted-space">  </span>linhas: 3 },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]</p>
+<p class="p1"><span class="Apple-converted-space">  </span>},</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">const QUADRO_FINAL = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>titulo: "📋 Quadro Final — Evolução dos Modelos",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>linhas: ["Dalton", "Thomson", "Rutherford", "Bohr"],</p>
+<p class="p1"><span class="Apple-converted-space">  </span>reflexao: "A ciência avança errando e corrigindo. O que a história dos modelos atômicos ensina sobre como o conhecimento científico funciona? Escreva com suas palavras."</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>🗂️<span class="Apple-converted-space">  </span>ESTADO DO APP</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">let db, refGrupo;</p>
+<p class="p1">let state = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>nome: "", turma: "", grupo: "", modeloPrincipal: "",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>modeloIdx: 0, secaoIdx: 0,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>answers: {}<span class="Apple-converted-space">  </span>// chave: "modeloId/secaoId/campo"<span class="Apple-converted-space">  </span>valor: string</p>
+<p class="p1">};</p>
+<p class="p1">let saveTimer = null;</p>
+<p class="p1">let listener = null;</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>🚀 INICIALIZAÇÃO</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">window.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>firebase.initializeApp(FIREBASE_CONFIG);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>db = firebase.database();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} catch(e) {}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('loading').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>mostrarTela('home');</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">function mostrarTela(id) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.screen').forEach(s =&gt; s.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('screen-' + id).classList.add('active');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>🔑 ENTRAR</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function entrar() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const nome <span class="Apple-converted-space">  </span>= document.getElementById('input-nome').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const turma<span class="Apple-converted-space">  </span>= document.getElementById('input-turma').value.trim().toUpperCase();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const grupo<span class="Apple-converted-space">  </span>= document.getElementById('input-grupo').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const modelo = document.getElementById('input-modelo').value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const err<span class="Apple-converted-space">    </span>= document.getElementById('home-error');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!nome || !turma || !grupo || !modelo) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>err.textContent = "Preencha todos os campos antes de continuar.";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>err.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>err.style.display = 'none';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.nome <span class="Apple-converted-space">  </span>= nome;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.turma<span class="Apple-converted-space">  </span>= turma;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.grupo<span class="Apple-converted-space">  </span>= grupo;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.modeloPrincipal = modelo;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.modeloIdx = MODELOS.findIndex(m =&gt; m.id === modelo);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (state.modeloIdx &lt; 0) state.modeloIdx = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.secaoIdx = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const chave = `turma_${turma}/grupo_${grupo}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>refGrupo = db.ref(`dossies/${chave}`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Escuta mudanças em tempo real</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (listener) listener();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>listener = refGrupo.on('value', snap =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const data = snap.val() || {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const novas = data.respostas || {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Só atualiza campos que não estão focados agora</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Object.entries(novas).forEach(([k, v]) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (state.answers[k] !== v) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>state.answers[k] = v;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const el = document.querySelector(`[data-key="${k}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (el &amp;&amp; document.activeElement !== el) el.value = v;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>atualizarUI();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Abre tela do app</p>
+<p class="p1"><span class="Apple-converted-space">  </span>mostrarTela('app');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('h-grupo').textContent = `Turma ${turma} · Grupo ${grupo}`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('h-turma-nome').textContent = nome;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderModelTabs();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderSection();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>💾 SALVAR</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function salvar(campo, valor) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>state.answers[campo] = valor;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>setSyncStatus('saving');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>clearTimeout(saveTimer);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>saveTimer = setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>refGrupo.update({ respostas: state.answers })</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.then(() =&gt; setSyncStatus('ok'))</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.catch(() =&gt; setSyncStatus('error'));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}, 600);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function setSyncStatus(s) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const dot<span class="Apple-converted-space">  </span>= document.getElementById('sync-dot');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const text = document.getElementById('sync-text');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s === 'saving') { dot.className = 'sync-dot saving'; text.textContent = 'Salvando...'; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else if (s === 'ok') { dot.className = 'sync-dot'; text.textContent = 'Salvo ✓'; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>else { dot.className = 'sync-dot saving'; text.textContent = 'Erro de conexão'; }</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function getVal(modeloId, secaoId, campo) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return state.answers[`${modeloId}/${secaoId}/${campo}`] || '';</p>
+<p class="p1">}</p>
+<p class="p1">function setVal(modeloId, secaoId, campo, valor) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>salvar(`${modeloId}/${secaoId}/${campo}`, valor);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1"><span class="Apple-converted-space">   </span>🎨 RENDER</p>
+<p class="p1"><span class="Apple-converted-space">   </span>══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function renderModelTabs() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const tabs = document.getElementById('model-tabs');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tabs.innerHTML = MODELOS.map((m, i) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="model-tab ${i === state.modeloIdx ? 'active' : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>style="${i === state.modeloIdx ? `background:${m.cor}` : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>onclick="irModelo(${i})"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>${m.emoji} ${m.nome}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>`).join('') + `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="model-tab ${state.modeloIdx === 4 ? 'active' : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>style="${state.modeloIdx === 4 ? 'background:#4A235A' : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>onclick="irModelo(4)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>📋 Final</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function renderSection() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const modelo = MODELOS[state.modeloIdx];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!modelo) { renderFinal(); return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const secao = modelo.secoes[state.secaoIdx];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const header = document.getElementById('app-header');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header.style.background = modelo.cor;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Dots</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const dots = document.getElementById('section-dots');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dots.innerHTML = modelo.secoes.map((_, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const preenchida = temResposta(modelo.id, modelo.secoes[i].id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="section-dot ${i === state.secaoIdx ? 'active' : ''} ${preenchida ? 'filled' : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>style="${i === state.secaoIdx ? `background:${modelo.cor}` : preenchida ? `background:${modelo.cor}` : ''}"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>onclick="irSecao(${i})"&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Botão prev</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('btn-prev').style.display =</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(state.modeloIdx === 0 &amp;&amp; state.secaoIdx === 0) ? 'none' : 'block';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Botão next</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const btn = document.getElementById('btn-next');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const isLast = state.modeloIdx === MODELOS.length - 1 &amp;&amp; state.secaoIdx === modelo.secoes.length - 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>btn.style.background = isLast ? '#4A235A' : modelo.cor;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>btn.textContent = isLast ? '📋 Ir para o Quadro Final →' : 'Próxima seção →';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Body</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const body = document.getElementById('form-body');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2 class="section-titulo" style="color:${modelo.cor}"&gt;${secao.titulo}&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="section-pergunta"&gt;${secao.pergunta}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>${renderCampo(modelo, secao)}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>atualizarProgresso();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function renderCampo(modelo, secao) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const mid = modelo.id, sid = secao.id;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (secao.tipo === 'texto') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const val = getVal(mid, sid, 'main');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;textarea rows="${secao.linhas + 1}" data-key="${mid}/${sid}/main"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>oninput="setVal('${mid}','${sid}','main',this.value)"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>placeholder="Escreva sua resposta aqui..."&gt;${val}&lt;/textarea&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">if (secao.tipo === ‘lista’) {</p>
+<p class="p1">return secao.itens.map((item, i) =&gt; {</p>
+<p class="p1">const val = getVal(mid, sid, `item_${i}`);</p>
+<p class="p1">return `&lt;div class="bullet-row"&gt; &lt;span class="bullet-label" style="color:${modelo.cor}"&gt;${item}:&lt;/span&gt; &lt;input class="answer-input" data-key="${mid}/${sid}/item_${i}" type="text" value="${escHtml(val)}" placeholder="..." oninput="setVal('${mid}','${sid}','item_${i}',this.value)"&gt; &lt;/div&gt;`;</p>
+<p class="p1">}).join(’’);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">if (secao.tipo === ‘trajetorias’) {</p>
+<p class="p1">return secao.itens.map((item, i) =&gt; {</p>
+<p class="p1">const vO = getVal(mid, sid, `t${i}_o`);</p>
+<p class="p1">const vP = getVal(mid, sid, `t${i}_p`);</p>
+<p class="p1">return `&lt;div class="traj-card"&gt; &lt;div class="traj-header" style="background:${modelo.cor}"&gt;${item}&lt;/div&gt; &lt;div class="traj-body"&gt; &lt;span class="traj-label"&gt;O que aconteceu:&lt;/span&gt; &lt;textarea rows="2" data-key="${mid}/${sid}/t${i}_o" oninput="setVal('${mid}','${sid}','t${i}_o',this.value)" placeholder="..."&gt;${vO}&lt;/textarea&gt; &lt;span class="traj-label"&gt;O que isso prova:&lt;/span&gt; &lt;textarea rows="2" data-key="${mid}/${sid}/t${i}_p" oninput="setVal('${mid}','${sid}','t${i}_p',this.value)" placeholder="..."&gt;${vP}&lt;/textarea&gt; &lt;/div&gt; &lt;/div&gt;`;</p>
+<p class="p1">}).join(’’);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">if (secao.tipo === ‘camadas’) {</p>
+<p class="p1">const camadas = [‘K’,‘L’,‘M’,‘N’];</p>
+<p class="p1">const elementos = [</p>
+<p class="p1">{ nome: ‘Sódio (Na, Z=11)’,<span class="Apple-converted-space">  </span>cams: [‘K’,‘L’,‘M’] },</p>
+<p class="p1">{ nome: ‘Cloro (Cl, Z=17)’, cams: [‘K’,‘L’,‘M’] },</p>
+<p class="p1">];</p>
+<p class="p1">let html = `&lt;p style="font-size:14px;font-weight:700;color:#555;margin-bottom:10px"&gt;Máximo de elétrons por camada:&lt;/p&gt; &lt;div class="camadas-grid"&gt;`;</p>
+<p class="p1">camadas.forEach(c =&gt; {</p>
+<p class="p1">const v = getVal(mid, sid, `cam_${c}`);</p>
+<p class="p1">html += `&lt;div class="camada-box"&gt; &lt;div class="camada-circle" style="background:${modelo.cor}"&gt;${c}&lt;/div&gt; &lt;input class="camada-input" data-key="${mid}/${sid}/cam_${c}" type="text" value="${escHtml(v)}" placeholder="máx" oninput="setVal('${mid}','${sid}','cam_${c}',this.value)"&gt; &lt;/div&gt;`;</p>
+<p class="p1">});</p>
+<p class="p1">html += `&lt;/div&gt; &lt;p style="font-size:14px;font-weight:700;color:#555;margin:14px 0 8px"&gt;Distribuição eletrônica:&lt;/p&gt;`;</p>
+<p class="p1">elementos.forEach((el, ei) =&gt; {</p>
+<p class="p1">html += `&lt;div class="elemento-card"&gt; &lt;div class="elemento-nome" style="color:${modelo.cor}"&gt;${el.nome}&lt;/div&gt; &lt;div class="elemento-row"&gt;`;</p>
+<p class="p1">el.cams.forEach(c =&gt; {</p>
+<p class="p1">const v = getVal(mid, sid, `el_${ei}_${c}`);</p>
+<p class="p1">html += `&lt;div class="camada-box"&gt; &lt;div class="camada-circle" style="background:${modelo.cor};width:40px;height:40px;font-size:15px"&gt;${c}&lt;/div&gt; &lt;input class="camada-input" data-key="${mid}/${sid}/el_${ei}_${c}" type="text" value="${escHtml(v)}" placeholder="e⁻" oninput="setVal('${mid}','${sid}','el_${ei}_${c}',this.value)"&gt; &lt;/div&gt;`;</p>
+<p class="p1">});</p>
+<p class="p1">html += `&lt;/div&gt;&lt;/div&gt;`;</p>
+<p class="p1">});</p>
+<p class="p1">return html;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">return ‘’;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function renderFinal() {</p>
+<p class="p1">state.modeloIdx = 4;</p>
+<p class="p1">const header = document.getElementById(‘app-header’);</p>
+<p class="p1">header.style.background = ‘#4A235A’;</p>
+<p class="p1">document.getElementById(‘section-dots’).innerHTML = ‘’;</p>
+<p class="p1">document.getElementById(‘btn-prev’).style.display = ‘block’;</p>
+<p class="p2"><br></p>
+<p class="p1">const btn = document.getElementById(‘btn-next’);</p>
+<p class="p1">btn.style.background = ‘#145A32’;</p>
+<p class="p1">btn.textContent = ‘✅ Concluir Dossiê’;</p>
+<p class="p2"><br></p>
+<p class="p1">const body = document.getElementById(‘form-body’);</p>
+<p class="p1">let html = `&lt;h2 class="section-titulo" style="color:#4A235A"&gt;${QUADRO_FINAL.titulo}&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="section-pergunta"&gt;Preencha este quadro depois de pesquisar todos os modelos. Ele é o mapa mais útil do seu grupo no dia do jogo.&lt;/p&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">QUADRO_FINAL.linhas.forEach(row =&gt; {</p>
+<p class="p1">const vR = getVal(‘final’, row, ‘resolveu’);</p>
+<p class="p1">const vL = getVal(‘final’, row, ‘deixou’);</p>
+<p class="p1">html += `&lt;div class="final-card"&gt; &lt;div class="final-card-header" style="background:${corDoModelo(row)}"&gt;${emojiDoModelo(row)} ${row}&lt;/div&gt; &lt;div class="final-card-body"&gt; &lt;span class="final-field-label"&gt;O que resolveu do modelo anterior:&lt;/span&gt; &lt;textarea rows="2" data-key="final/${row}/resolveu" oninput="setVal('final','${row}','resolveu',this.value)" placeholder="..."&gt;${vR}&lt;/textarea&gt; &lt;span class="final-field-label"&gt;O que deixou sem resposta:&lt;/span&gt; &lt;textarea rows="2" data-key="final/${row}/deixou" oninput="setVal('final','${row}','deixou',this.value)" placeholder="..."&gt;${vL}&lt;/textarea&gt; &lt;/div&gt; &lt;/div&gt;`;</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">const vRef = getVal(‘final’, ‘reflexao’, ‘main’);</p>
+<p class="p1">html += `&lt;h3 class="section-titulo" style="color:#4A235A;margin-top:20px"&gt;Reflexão final&lt;/h3&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="section-pergunta"&gt;${QUADRO_FINAL.reflexao}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;textarea rows="5" data-key="final/reflexao/main"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>oninput="setVal('final','reflexao','main',this.value)"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>placeholder="Escreva com suas palavras..."&gt;${vRef}&lt;/textarea&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">body.innerHTML = html;</p>
+<p class="p1">atualizarProgresso();</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1">🧭 NAVEGAÇÃO</p>
+<p class="p1">══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function irModelo(idx) {</p>
+<p class="p1">state.modeloIdx = idx;</p>
+<p class="p1">state.secaoIdx = 0;</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">if (idx === 4) renderFinal();</p>
+<p class="p1">else renderSection();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function irSecao(idx) {</p>
+<p class="p1">state.secaoIdx = idx;</p>
+<p class="p1">renderSection();</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function nextSection() {</p>
+<p class="p1">const modelo = MODELOS[state.modeloIdx];</p>
+<p class="p1">if (!modelo) { concluir(); return; }</p>
+<p class="p1">if (state.secaoIdx &lt; modelo.secoes.length - 1) {</p>
+<p class="p1">state.secaoIdx++;</p>
+<p class="p1">renderSection();</p>
+<p class="p1">} else if (state.modeloIdx &lt; MODELOS.length - 1) {</p>
+<p class="p1">state.modeloIdx++;</p>
+<p class="p1">state.secaoIdx = 0;</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">renderSection();</p>
+<p class="p1">} else {</p>
+<p class="p1">renderFinal();</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function prevSection() {</p>
+<p class="p1">if (state.modeloIdx === 4) {</p>
+<p class="p1">state.modeloIdx = MODELOS.length - 1;</p>
+<p class="p1">state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">renderSection();</p>
+<p class="p1">return;</p>
+<p class="p1">}</p>
+<p class="p1">if (state.secaoIdx &gt; 0) {</p>
+<p class="p1">state.secaoIdx–;</p>
+<p class="p1">renderSection();</p>
+<p class="p1">} else if (state.modeloIdx &gt; 0) {</p>
+<p class="p1">state.modeloIdx–;</p>
+<p class="p1">state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">renderSection();</p>
+<p class="p1">}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function concluir() {</p>
+<p class="p1">document.getElementById(‘done-grupo-nome’).textContent =</p>
+<p class="p1">`Turma ${state.turma} · Grupo ${state.grupo}`;</p>
+<p class="p1">mostrarTela(‘done’);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function voltarApp() {</p>
+<p class="p1">mostrarTela(‘app’);</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">renderSection();</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1">📊 PROGRESSO</p>
+<p class="p1">══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function temResposta(modeloId, secaoId) {</p>
+<p class="p1">const prefix = `${modeloId}/${secaoId}/`;</p>
+<p class="p1">return Object.keys(state.answers).some(k =&gt; k.startsWith(prefix) &amp;&amp; state.answers[k].trim());</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function atualizarProgresso() {</p>
+<p class="p1">let preenchidas = 0;</p>
+<p class="p1">const total = MODELOS.reduce((s, m) =&gt; s + m.secoes.length, 0) + QUADRO_FINAL.linhas.length + 1;</p>
+<p class="p1">MODELOS.forEach(m =&gt; m.secoes.forEach(s =&gt; { if (temResposta(m.id, s.id)) preenchidas++; }));</p>
+<p class="p1">QUADRO_FINAL.linhas.forEach(row =&gt; { if (getVal(‘final’, row, ‘resolveu’).trim()) preenchidas++; });</p>
+<p class="p1">if (getVal(‘final’, ‘reflexao’, ‘main’).trim()) preenchidas++;</p>
+<p class="p1">document.getElementById(‘progress-fill’).style.width = Math.round(preenchidas / total * 100) + ‘%’;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function atualizarUI() {</p>
+<p class="p1">renderModelTabs();</p>
+<p class="p1">atualizarProgresso();</p>
+<p class="p1">// Reatualizar campos da seção atual</p>
+<p class="p1">document.querySelectorAll(’[data-key]’).forEach(el =&gt; {</p>
+<p class="p1">if (document.activeElement !== el) {</p>
+<p class="p1">const v = state.answers[el.dataset.key] || ‘’;</p>
+<p class="p1">if (el.value !== v) el.value = v;</p>
+<p class="p1">}</p>
+<p class="p1">});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1">📄 GERAR PDF</p>
+<p class="p1">══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function gerarPDF() {</p>
+<p class="p1">const area = document.getElementById(‘print-area’);</p>
+<p class="p1">let html = ` &lt;div class="print-cover"&gt; &lt;h1&gt;⚛️ Dossiê Científico&lt;/h1&gt; &lt;p class="sub"&gt;Modelos Atômicos — 1º Ano do Ensino Médio&lt;/p&gt; &lt;div class="group-box"&gt; &lt;p&gt;Turma: &lt;strong&gt;${escHtml(state.turma)}&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;Grupo: &lt;strong&gt;${escHtml(state.grupo)}&lt;/strong&gt;&lt;/p&gt; &lt;p style="font-size:11px;margin-top:6px;color:#777"&gt;Gerado em ${new Date().toLocaleDateString('pt-BR')}&lt;/p&gt; &lt;/div&gt; &lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">MODELOS.forEach((modelo, mi) =&gt; {</p>
+<p class="p1">if (mi &gt; 0) html += `&lt;div class="print-page-break"&gt;&lt;/div&gt;`;</p>
+<p class="p1">html += `&lt;div class="print-model"&gt; &lt;div class="print-model-header" style="background:${modelo.cor}"&gt;${modelo.emoji} Modelo de ${modelo.nome}&lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">```</p>
+<p class="p1">modelo.secoes.forEach(secao =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>html += `&lt;div class="print-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="print-section-title"&gt;${secao.titulo}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="print-question"&gt;${secao.pergunta}&lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (secao.tipo === 'texto') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const v = getVal(modelo.id, secao.id, 'main');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;div class="print-answer"&gt;${escHtml(v) || '(sem resposta)'}&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (secao.tipo === 'lista') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;table class="print-table"&gt;&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secao.itens.forEach((item, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const v = getVal(modelo.id, secao.id, `item_${i}`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html += `&lt;tr&gt;&lt;th style="width:120px"&gt;${item}&lt;/th&gt;&lt;td&gt;${escHtml(v) || '—'}&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;/tbody&gt;&lt;/table&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (secao.tipo === 'trajetorias') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;table class="print-table"&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Trajetória&lt;/th&gt;&lt;th&gt;O que aconteceu&lt;/th&gt;&lt;th&gt;O que isso prova&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>secao.itens.forEach((item, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const vO = getVal(modelo.id, secao.id, `t${i}_o`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const vP = getVal(modelo.id, secao.id, `t${i}_p`);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html += `&lt;tr&gt;&lt;td&gt;&lt;strong&gt;${item}&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;${escHtml(vO)||'—'}&lt;/td&gt;&lt;td&gt;${escHtml(vP)||'—'}&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;/tbody&gt;&lt;/table&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (secao.tipo === 'camadas') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const camadas = ['K','L','M','N'];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;table class="print-table"&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Camada&lt;/th&gt;${camadas.map(c=&gt;`&lt;th&gt;${c}&lt;/th&gt;`).join('')}&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;tr&gt;&lt;td&gt;Máximo de e⁻&lt;/td&gt;${camadas.map(c=&gt;`&lt;td&gt;${escHtml(getVal(modelo.id,secao.id,`cam_${c}`))||'—'}&lt;/td&gt;`).join('')}&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const els = [{nome:'Sódio (Na, Z=11)',ei:0},{nome:'Cloro (Cl, Z=17)',ei:1}];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>els.forEach(({nome,ei}) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html += `&lt;tr&gt;&lt;td&gt;${nome}&lt;/td&gt;${['K','L','M'].map(c=&gt;`&lt;td&gt;${escHtml(getVal(modelo.id,secao.id,`el_${ei}_${c}`))||'—'}&lt;/td&gt;`).join('')}&lt;td&gt;—&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;/tbody&gt;&lt;/table&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>html += `&lt;/div&gt;`;</p>
+<p class="p1">});</p>
+<p class="p1">html += `&lt;/div&gt;`;</p>
+<p class="p1">```</p>
+<p class="p2"><br></p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">// Quadro final</p>
+<p class="p1">html += `&lt;div class="print-page-break"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="print-final-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="print-model-header" style="background:#4A235A"&gt;📋 Quadro Final — Evolução dos Modelos&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;table class="print-table"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Modelo&lt;/th&gt;&lt;th&gt;O que resolveu&lt;/th&gt;&lt;th&gt;O que deixou sem resposta&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>QUADRO_FINAL.linhas.forEach(row =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const vR = getVal('final', row, 'resolveu');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const vL = getVal('final', row, 'deixou');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html += `&lt;tr&gt;&lt;td&gt;&lt;strong&gt;${row}&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;${escHtml(vR)||'—'}&lt;/td&gt;&lt;td&gt;${escHtml(vL)||'—'}&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>html += `&lt;/tbody&gt;&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="print-section" style="margin-top:16px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="print-section-title"&gt;Reflexão final&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="print-question"&gt;${QUADRO_FINAL.reflexao}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="print-answer"&gt;${escHtml(getVal('final','reflexao','main'))||'(sem resposta)'}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1">area.innerHTML = html;</p>
+<p class="p1">setTimeout(() =&gt; window.print(), 200);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* ══════════════════════════════════════════════════════════════════</p>
+<p class="p1">🛠️<span class="Apple-converted-space">  </span>UTILITÁRIOS</p>
+<p class="p1">══════════════════════════════════════════════════════════════════ */</p>
+<p class="p1">function corDoModelo(nome) {</p>
+<p class="p1">const m = MODELOS.find(x =&gt; x.nome === nome);</p>
+<p class="p1">return m ? m.cor : ‘#333’;</p>
+<p class="p1">}</p>
+<p class="p1">function emojiDoModelo(nome) {</p>
+<p class="p1">const m = MODELOS.find(x =&gt; x.nome === nome);</p>
+<p class="p1">return m ? m.emoji : ‘▪️’;</p>
+<p class="p1">}</p>
+<p class="p1">function escHtml(str) {</p>
+<p class="p1">if (!str) return ‘’;</p>
+<p class="p1">return str.replace(/&amp;/g,’&amp;’).replace(/&lt;/g,’&lt;’).replace(/&gt;/g,’&gt;’).replace(/”/g,’"’);</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
