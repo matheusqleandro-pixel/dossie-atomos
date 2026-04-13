@@ -3,641 +3,172 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dossiê Científico — Modelos Atômicos</title>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     FIREBASE — Cole aqui as suas credenciais (ver instruções)
-     ═══════════════════════════════════════════════════════════════ -->
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & BASE ───────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dalton:#1A5276;--thomson:#784212;--ruther:#7B241C;--bohr:#145A32;--final:#4A235A;
+  --bg:#0d1b2a;--card:#fff;--text:#1a1a1a;--muted:#666;--border:#e0e0e0;
+}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);min-height:100vh;color:var(--text);
+  background-image:radial-gradient(ellipse at 20% 20%,rgba(26,82,118,.3) 0%,transparent 50%),
+  radial-gradient(ellipse at 80% 80%,rgba(20,90,50,.2) 0%,transparent 50%);}
 
-:root {
-  --dalton:    #1A5276;
-  --thomson:   #784212;
-  --ruther:    #7B241C;
-  --bohr:      #145A32;
-  --final:     #4A235A;
-  --bg:        #0d1b2a;
-  --card:      #ffffff;
-  --text:      #1a1a1a;
-  --muted:     #666;
-  --border:    #e0e0e0;
-  --radius:    14px;
-  --shadow:    0 8px 40px rgba(0,0,0,0.35);
-}
+.screen{display:none}
+.screen.active{display:flex}
 
-body {
-  font-family: 'Source Sans 3', sans-serif;
-  background: var(--bg);
-  min-height: 100vh;
-  color: var(--text);
-  background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(26,82,118,0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(20,90,50,0.2) 0%, transparent 50%);
-}
+/* HOME */
+#screen-home{min-height:100vh;align-items:center;justify-content:center;padding:24px 16px}
+.home-card{background:#fff;border-radius:20px;padding:40px 32px;max-width:460px;width:100%;
+box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.home-atom{font-size:56px;text-align:center;margin-bottom:8px}
+.home-title{font-family:‘Lora’,serif;font-size:28px;font-weight:700;color:#1A3A5C;
+text-align:center;margin-bottom:4px}
+.home-sub{font-size:15px;color:var(–muted);text-align:center;margin-bottom:24px}
+.divider{width:50px;height:3px;background:#2E86C1;border-radius:2px;margin:0 auto 24px}
+.field-group{margin-bottom:16px}
+.field-group label{display:block;font-weight:700;font-size:12px;color:#444;
+text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.field-group input,.field-group select{width:100%;padding:13px 16px;border:2px solid var(–border);
+border-radius:10px;font-size:16px;font-family:‘Source Sans 3’,sans-serif;color:var(–text);
+outline:none;transition:border .2s;background:#fff}
+.field-group input:focus,.field-group select:focus{border-color:#2E86C1}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.home-note{background:#EBF5FB;border-left:4px solid #2E86C1;padding:12px 16px;
+border-radius:0 8px 8px 0;font-size:13px;color:#1A5276;line-height:1.5;margin-bottom:20px}
+.btn-primary{width:100%;padding:15px;background:#1A3A5C;color:#fff;border:none;
+border-radius:12px;font-size:17px;font-weight:700;font-family:‘Lora’,serif;
+cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:#1F4E79}
+.error-msg{color:#C0392B;font-size:13px;margin-bottom:10px;text-align:center}
 
-/* ── SCREENS ────────────────────────────────────────────────────── */
-.screen { display: none; }
-.screen.active { display: flex; }
+/* STATUS BAR */
+.status-bar{display:flex;align-items:center;gap:8px;padding:8px 16px;
+font-size:12px;border-radius:8px;margin-bottom:16px}
+.status-bar.ok{background:#D5F5E3;color:#1E8449}
+.status-bar.warn{background:#FFF3CD;color:#7D4E00}
+.status-bar.err{background:#FADBD8;color:#922B21}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-bar.ok .status-dot{background:#1E8449}
+.status-bar.warn .status-dot{background:#F39C12;animation:pulse 1.5s infinite}
+.status-bar.err .status-dot{background:#E74C3C}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── HOME SCREEN ────────────────────────────────────────────────── */
-#screen-home {
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
+/* APP */
+#screen-app{flex-direction:column;align-items:center;min-height:100vh;padding-bottom:60px}
+.app-wrapper{width:100%;max-width:680px;background:#fff;min-height:100vh;
+display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.35)}
+.app-header{padding:14px 18px 10px;color:#fff;position:sticky;top:0;z-index:100;transition:background .3s}
+.header-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.header-info strong{font-size:15px;display:block}
+.header-info span{font-size:12px;opacity:.85}
+.sync-pill{font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.2);
+display:flex;align-items:center;gap:5px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#2ECC71}
+.sync-dot.saving{background:#F39C12;animation:pulse 1s infinite}
+.sync-dot.offline{background:#E74C3C}
+.prog-bg{height:4px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;background:rgba(255,255,255,.7);transition:width .4s}
+.model-tabs{display:flex;gap:5px;padding:8px 10px;background:#f4f4f4;
+overflow-x:auto;scrollbar-width:none}
+.model-tabs::-webkit-scrollbar{display:none}
+.m-tab{padding:7px 14px;border-radius:20px;border:none;font-size:13px;font-weight:700;
+cursor:pointer;white-space:nowrap;font-family:‘Source Sans 3’,sans-serif;
+transition:all .2s;background:#ddd;color:#555;opacity:.7}
+.m-tab.active{opacity:1;color:#fff}
+.sec-nav{display:flex;align-items:center;justify-content:space-between;
+padding:8px 14px;border-bottom:1px solid var(–border);background:#fafafa}
+.sec-dots{display:flex;gap:5px}
+.sec-dot{width:9px;height:9px;border-radius:50%;background:#ddd;cursor:pointer;transition:all .2s}
+.sec-dot.active{transform:scale(1.3)}
+.nav-btn{background:none;border:2px solid var(–border);border-radius:8px;
+padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;color:var(–muted);
+transition:all .2s;font-family:‘Source Sans 3’,sans-serif}
+.nav-btn:hover{border-color:#aaa;color:#333}
+.form-body{flex:1;padding:22px 18px 28px}
+.sec-title{font-family:‘Lora’,serif;font-size:17px;font-weight:700;margin-bottom:8px}
+.sec-q{font-size:15px;color:#444;line-height:1.65;margin-bottom:14px}
+textarea,.ans-input{width:100%;padding:11px 13px;border:2px solid var(–border);
+border-radius:10px;font-size:15px;font-family:‘Source Sans 3’,sans-serif;
+resize:vertical;outline:none;line-height:1.6;color:var(–text);transition:border .2s}
+textarea:focus,.ans-input:focus{border-color:#2E86C1}
+.bullet-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.bullet-lbl{font-weight:700;font-size:13px;min-width:90px;white-space:nowrap}
+.traj-card{border:2px solid var(–border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.traj-hdr{font-weight:700;font-size:14px;padding:9px 14px;color:#fff}
+.traj-body{padding:10px 14px}
+.traj-lbl{font-size:12px;font-weight:700;color:var(–muted);margin-bottom:4px;margin-top:8px;display:block}
+.cam-grid{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.cam-box{display:flex;flex-direction:column;align-items:center;gap:5px}
+.cam-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+justify-content:center;font-weight:700;font-size:17px;color:#fff}
+.cam-input{width:58px;padding:7px 5px;text-align:center;border:2px solid var(–border);
+border-radius:8px;font-size:14px;font-family:‘Source Sans 3’,sans-serif;outline:none}
+.el-card{background:#f9f9f9;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.el-nome{font-weight:700;font-size:13px;margin-bottom:8px}
+.el-row{display:flex;gap:14px;flex-wrap:wrap}
+.bot-bar{position:sticky;bottom:0;background:#fff;border-top:2px solid var(–border);
+padding:10px 16px;display:flex;gap:8px;align-items:center}
+.btn-pdf{padding:10px 16px;background:#fff;border:2px solid #1A3A5C;border-radius:10px;
+font-size:13px;font-weight:700;color:#1A3A5C;cursor:pointer;
+font-family:‘Source Sans 3’,sans-serif;white-space:nowrap}
+.btn-pdf:hover{background:#EBF5FB}
+.btn-adv{flex:1;padding:10px;border:none;border-radius:10px;font-size:14px;font-weight:700;
+color:#fff;cursor:pointer;font-family:‘Source Sans 3’,sans-serif}
+.final-card{border:2px solid var(–border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.final-hdr{font-weight:700;font-size:14px;padding:9px 14px;color:#fff}
+.final-body{padding:12px 14px}
+.final-lbl{font-size:12px;font-weight:700;color:var(–muted);margin-bottom:4px;
+margin-top:10px;display:block}
+.final-lbl:first-child{margin-top:0}
 
-.home-card {
-  background: var(--card);
-  border-radius: 20px;
-  padding: 44px 36px;
-  max-width: 460px;
-  width: 100%;
-  box-shadow: var(--shadow);
-}
+/* DONE */
+#screen-done{min-height:100vh;align-items:center;justify-content:center;padding:24px}
+.done-card{background:#fff;border-radius:20px;padding:44px 28px;max-width:400px;
+width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center}
+.done-icon{font-size:60px;margin-bottom:14px}
+.done-title{font-family:‘Lora’,serif;font-size:24px;color:#145A32;margin-bottom:8px}
+.done-sub{font-size:15px;color:#555;line-height:1.6;margin-bottom:20px}
+.done-box{background:#D5F5E3;border-radius:12px;padding:14px 18px;margin-bottom:20px}
+.done-box strong{font-size:17px;display:block;color:#145A32;margin-bottom:4px}
+.done-box p{color:#1E8449;font-size:13px;line-height:1.5}
+.btn-sec{width:100%;padding:12px;background:#fff;border:2px solid #555;border-radius:10px;
+font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:10px;
+font-family:‘Source Sans 3’,sans-serif}
 
-.home-atom { font-size: 56px; text-align: center; margin-bottom: 8px; }
-
-.home-title {
-  font-family: 'Lora', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #1A3A5C;
-  text-align: center;
-  margin-bottom: 4px;
+/* PRINT */
+#print-area{display:none}
+@media print{
+body>*:not(#print-area){display:none!important}
+#print-area{display:block!important;font-family:Arial,sans-serif;font-size:11px;color:#000}
+.pc{text-align:center;padding:50px 30px;border-bottom:3px solid #1A3A5C;margin-bottom:24px;page-break-after:always}
+.pc h1{font-size:26px;color:#1A3A5C;margin-bottom:6px}
+.pc .sub{font-size:14px;color:#555;margin-bottom:20px}
+.pc .gbox{display:inline-block;border:2px solid #1A3A5C;border-radius:8px;padding:12px 28px}
+.pc .gbox p{margin:2px 0;font-size:13px}
+.pc .gbox strong{font-size:17px}
+.pm{margin-bottom:20px}
+.pm-hdr{padding:9px 14px;color:#fff;font-size:15px;font-weight:700;margin-bottom:12px;page-break-after:avoid}
+.ps{margin-bottom:14px;page-break-inside:avoid}
+.ps-title{font-weight:700;font-size:12px;color:#333;margin-bottom:3px}
+.ps-q{font-size:10px;color:#555;margin-bottom:5px;font-style:italic}
+.ps-ans{background:#f9f9f9;border:1px solid #ddd;border-radius:5px;padding:7px 9px;
+font-size:11px;min-height:24px;white-space:pre-wrap;word-break:break-word;line-height:1.5}
+.ppb{page-break-before:always}
+.pt{width:100%;border-collapse:collapse;margin-bottom:8px}
+.pt th,.pt td{border:1px solid #ccc;padding:5px 7px;font-size:10px;vertical-align:top}
+.pt th{background:#eee;font-weight:700}
 }
-
-.home-sub {
-  font-size: 15px;
-  color: var(--muted);
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.divider {
-  width: 50px; height: 3px;
-  background: #2E86C1;
-  border-radius: 2px;
-  margin: 0 auto 28px;
-}
-
-.field-group { margin-bottom: 18px; }
-
-.field-group label {
-  display: block;
-  font-weight: 700;
-  font-size: 13px;
-  color: #444;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 7px;
-}
-
-.field-group input,
-.field-group select {
-  width: 100%;
-  padding: 13px 16px;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  font-size: 16px;
-  font-family: 'Source Sans 3', sans-serif;
-  color: var(--text);
-  outline: none;
-  transition: border 0.2s;
-  background: #fff;
-}
-
-.field-group input:focus,
-.field-group select:focus { border-color: #2E86C1; }
-
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-.home-note {
-  background: #EBF5FB;
-  border-left: 4px solid #2E86C1;
-  padding: 12px 16px;
-  border-radius: 0 8px 8px 0;
-  font-size: 13px;
-  color: #1A5276;
-  line-height: 1.5;
-  margin-bottom: 22px;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 15px;
-  background: #1A3A5C;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  font-family: 'Lora', serif;
-  cursor: pointer;
-  letter-spacing: 0.3px;
-  transition: background 0.2s, transform 0.1s;
-}
-.btn-primary:hover { background: #1F4E79; }
-.btn-primary:active { transform: scale(0.98); }
-
-.error-msg {
-  color: #C0392B;
-  font-size: 13px;
-  margin-top: -10px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-/* ── MAIN APP SCREEN ────────────────────────────────────────────── */
-#screen-app {
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0 60px;
-  min-height: 100vh;
-}
-
-.app-wrapper {
-  width: 100%;
-  max-width: 680px;
-  background: var(--card);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow);
-}
-
-/* Header */
-.app-header {
-  padding: 16px 20px 12px;
-  color: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  transition: background 0.3s;
-}
-
-.header-row1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.header-group-info {
-  font-size: 13px;
-  opacity: 0.9;
-  line-height: 1.4;
-}
-.header-group-info strong { font-size: 15px; display: block; }
-
-.sync-badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.2);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
-}
-.sync-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #2ECC71;
-  animation: pulse 2s infinite;
-}
-.sync-dot.saving { background: #F39C12; animation: none; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.progress-bar-bg {
-  height: 5px;
-  background: rgba(255,255,255,0.25);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.4s ease;
-  background: rgba(255,255,255,0.7);
-}
-
-/* Model tabs */
-.model-tabs {
-  display: flex;
-  gap: 5px;
-  padding: 10px 12px;
-  background: #f4f4f4;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.model-tabs::-webkit-scrollbar { display: none; }
-
-.model-tab {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: none;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: 'Source Sans 3', sans-serif;
-  transition: all 0.2s;
-  opacity: 0.6;
-}
-.model-tab.active { opacity: 1; color: #fff; }
-.model-tab.partial { opacity: 0.85; }
-
-/* Section nav */
-.section-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  background: #fafafa;
-}
-
-.section-dots {
-  display: flex;
-  gap: 6px;
-}
-.section-dot {
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: #ddd;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-.section-dot.active { transform: scale(1.3); }
-.section-dot.filled { opacity: 0.7; }
-
-.nav-btn {
-  background: none;
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--muted);
-  transition: all 0.2s;
-  font-family: 'Source Sans 3', sans-serif;
-}
-.nav-btn:hover { border-color: #aaa; color: #333; }
-.nav-btn.next-model { color: #fff; border: none; }
-
-/* Form body */
-.form-body {
-  flex: 1;
-  padding: 24px 20px 32px;
-}
-
-.section-titulo {
-  font-family: 'Lora', serif;
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.section-pergunta {
-  font-size: 15px;
-  color: #444;
-  line-height: 1.65;
-  margin-bottom: 16px;
-}
-
-textarea, .answer-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  font-size: 15px;
-  font-family: 'Source Sans 3', sans-serif;
-  resize: vertical;
-  outline: none;
-  line-height: 1.6;
-  color: var(--text);
-  transition: border 0.2s;
-}
-textarea:focus, .answer-input:focus { border-color: #2E86C1; }
-
-.bullet-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.bullet-label {
-  font-weight: 700;
-  font-size: 14px;
-  min-width: 95px;
-  white-space: nowrap;
-}
-
-.traj-card {
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 14px;
-}
-.traj-header {
-  font-weight: 700;
-  font-size: 14px;
-  padding: 10px 16px;
-  color: #fff;
-}
-.traj-body { padding: 12px 16px; }
-.traj-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 5px;
-  margin-top: 10px;
-  display: block;
-}
-
-.camadas-grid {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.camada-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-.camada-circle {
-  width: 46px; height: 46px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 18px;
-  color: #fff;
-}
-.camada-input {
-  width: 60px;
-  padding: 8px 6px;
-  text-align: center;
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  font-size: 15px;
-  font-family: 'Source Sans 3', sans-serif;
-  outline: none;
-}
-
-.elemento-card {
-  background: #f9f9f9;
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-}
-.elemento-nome {
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-.elemento-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-/* Bottom bar */
-.bottom-bar {
-  position: sticky;
-  bottom: 0;
-  background: #fff;
-  border-top: 2px solid var(--border);
-  padding: 12px 20px;
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-pdf {
-  padding: 11px 20px;
-  background: #fff;
-  border: 2px solid #1A3A5C;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #1A3A5C;
-  cursor: pointer;
-  font-family: 'Source Sans 3', sans-serif;
-  transition: all 0.2s;
-}
-.btn-pdf:hover { background: #EBF5FB; }
-
-.btn-advance {
-  padding: 11px 22px;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'Source Sans 3', sans-serif;
-  transition: all 0.2s;
-  flex: 1;
-  max-width: 280px;
-}
-
-/* Final screen */
-.final-card {
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-.final-card-header {
-  font-weight: 700;
-  font-size: 15px;
-  padding: 10px 16px;
-  color: #fff;
-}
-.final-card-body { padding: 14px 16px; }
-.final-field-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  margin-bottom: 5px;
-  margin-top: 12px;
-  display: block;
-}
-.final-field-label:first-child { margin-top: 0; }
-
-/* ── PRINT / PDF ────────────────────────────────────────────────── */
-#print-area {
-  display: none;
-}
-
-@media print {
-  body > *:not(#print-area) { display: none !important; }
-  #print-area {
-    display: block !important;
-    font-family: 'Source Sans 3', Arial, sans-serif;
-    font-size: 12px;
-    color: #000;
-    padding: 0;
-    margin: 0;
-  }
-
-  .print-cover {
-    text-align: center;
-    padding: 60px 40px;
-    border-bottom: 3px solid #1A3A5C;
-    margin-bottom: 30px;
-    page-break-after: always;
-  }
-  .print-cover h1 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 28px;
-    color: #1A3A5C;
-    margin-bottom: 8px;
-  }
-  .print-cover .sub { font-size: 16px; color: #555; margin-bottom: 24px; }
-  .print-cover .group-box {
-    display: inline-block;
-    border: 2px solid #1A3A5C;
-    border-radius: 10px;
-    padding: 14px 32px;
-    margin-top: 10px;
-  }
-  .print-cover .group-box p { margin: 2px 0; font-size: 14px; }
-  .print-cover .group-box strong { font-size: 18px; }
-
-  .print-model { page-break-inside: avoid; margin-bottom: 0; }
-  .print-model-header {
-    padding: 10px 16px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 14px;
-    page-break-after: avoid;
-  }
-  .print-section { margin-bottom: 16px; page-break-inside: avoid; }
-  .print-section-title {
-    font-weight: 700;
-    font-size: 13px;
-    color: #333;
-    margin-bottom: 4px;
-  }
-  .print-question {
-    font-size: 11px;
-    color: #555;
-    margin-bottom: 6px;
-    font-style: italic;
-  }
-  .print-answer {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 12px;
-    min-height: 30px;
-    white-space: pre-wrap;
-    word-break: break-word;
-    line-height: 1.5;
-  }
-  .print-page-break { page-break-before: always; }
-  .print-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  .print-table th, .print-table td {
-    border: 1px solid #ccc;
-    padding: 6px 8px;
-    font-size: 11px;
-    vertical-align: top;
-  }
-  .print-table th { background: #eee; font-weight: 700; }
-  .print-final-section { margin-top: 24px; page-break-inside: avoid; }
-}
-
-/* ── LOADING OVERLAY ─────────────────────────────────────────────── */
-#loading {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  gap: 16px;
-}
-#loading .spin {
-  font-size: 48px;
-  animation: spin 1.5s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-#loading p { color: #fff; font-size: 16px; }
-#loading.hidden { display: none; }
-
-/* ── DONE SCREEN ─────────────────────────────────────────────────── */
-#screen-done {
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.done-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 48px 32px;
-  max-width: 420px;
-  width: 100%;
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-.done-icon { font-size: 64px; margin-bottom: 16px; }
-.done-title {
-  font-family: 'Lora', serif;
-  font-size: 26px;
-  color: #145A32;
-  margin-bottom: 10px;
-}
-.done-sub { font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 24px; }
-.done-box {
-  background: #D5F5E3;
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-bottom: 24px;
-}
-.done-box p { color: #1E8449; font-size: 14px; line-height: 1.5; }
-.done-box strong { font-size: 18px; display: block; margin-bottom: 4px; color: #145A32; }
 </style>
 
 </head>
 <body>
 
-<!-- ── LOADING ─────────────────────────────────────────────────────── -->
+<!-- HOME -->
 
-<div id="loading">
-  <div class="spin">⚛️</div>
-  <p>Conectando...</p>
-</div>
-
-<!-- ── HOME ───────────────────────────────────────────────────────── -->
-
-<div id="screen-home" class="screen">
+<div id="screen-home" class="screen active">
   <div class="home-card">
     <div class="home-atom">⚛️</div>
     <h1 class="home-title">Dossiê Científico</h1>
@@ -645,112 +176,98 @@ textarea:focus, .answer-input:focus { border-color: #2E86C1; }
     <div class="divider"></div>
 
 ```
-<div class="field-group">
-  <label>Seu nome completo</label>
-  <input type="text" id="input-nome" placeholder="Ex: Ana Paula Silva" autocomplete="off">
+<div id="firebase-status" class="status-bar warn" style="display:none">
+  <div class="status-dot"></div>
+  <span id="firebase-status-text">Conectando ao banco de dados...</span>
 </div>
 
+<div class="field-group">
+  <label>Seu nome completo</label>
+  <input id="inp-nome" type="text" placeholder="Ex: Ana Paula Silva" autocomplete="off">
+</div>
 <div class="row-2">
   <div class="field-group">
     <label>Turma</label>
-    <input type="text" id="input-turma" placeholder="Ex: 1A" autocomplete="off" maxlength="4">
+    <input id="inp-turma" type="text" placeholder="Ex: 1A" maxlength="6" autocomplete="off">
   </div>
   <div class="field-group">
     <label>Número do grupo</label>
-    <input type="number" id="input-grupo" placeholder="Ex: 3" min="1" max="30">
+    <input id="inp-grupo" type="number" placeholder="Ex: 3" min="1" max="30">
   </div>
 </div>
-
 <div class="field-group">
   <label>Modelo que você vai pesquisar</label>
-  <select id="input-modelo">
-    <option value="">— Escolha o seu modelo —</option>
+  <select id="inp-modelo">
+    <option value="">— Escolha seu modelo —</option>
     <option value="dalton">🔵 Dalton</option>
     <option value="thomson">🟡 Thomson</option>
     <option value="rutherford">🔴 Rutherford</option>
     <option value="bohr">🟢 Bohr</option>
   </select>
 </div>
-
 <div class="home-note">
-  💡 Cada integrante pesquisa um modelo diferente, mas todos podem navegar pelo dossiê completo do grupo. No final, o grupo gera um PDF único com tudo junto.
+  💡 Cada integrante pesquisa um modelo diferente. Todos do grupo usam a mesma turma e número de grupo. No final, o grupo gera um PDF com tudo junto.
 </div>
-
-<p class="error-msg" id="home-error" style="display:none"></p>
+<p class="error-msg" id="home-err" style="display:none"></p>
 <button class="btn-primary" onclick="entrar()">Entrar no Dossiê →</button>
 ```
 
   </div>
 </div>
 
-<!-- ── APP ─────────────────────────────────────────────────────────── -->
+<!-- APP -->
 
 <div id="screen-app" class="screen">
   <div class="app-wrapper">
-
-```
-<div class="app-header" id="app-header">
-  <div class="header-row1">
-    <div class="header-group-info">
-      <strong id="h-grupo">Grupo —</strong>
-      <span id="h-turma-nome"></span>
+    <div class="app-header" id="app-hdr">
+      <div class="header-row1">
+        <div class="header-info">
+          <strong id="h-grupo">Grupo —</strong>
+          <span id="h-nome"></span>
+        </div>
+        <div class="sync-pill" id="sync-pill">
+          <div class="sync-dot" id="sync-dot"></div>
+          <span id="sync-txt">Conectado</span>
+        </div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
     </div>
-    <div class="sync-badge" id="sync-badge">
-      <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-text">Conectado</span>
+    <div class="model-tabs" id="mtabs"></div>
+    <div class="sec-nav">
+      <div class="sec-dots" id="sdots"></div>
+      <button class="nav-btn" id="btn-prev" onclick="prevSec()">← Anterior</button>
+    </div>
+    <div class="form-body" id="fbody"></div>
+    <div class="bot-bar">
+      <button class="btn-pdf" onclick="gerarPDF()">📄 Gerar PDF</button>
+      <button class="btn-adv" id="btn-next" onclick="nextSec()">Próxima →</button>
     </div>
   </div>
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
-  </div>
 </div>
 
-<div class="model-tabs" id="model-tabs"></div>
-
-<div class="section-nav">
-  <div class="section-dots" id="section-dots"></div>
-  <button class="nav-btn" id="btn-prev" onclick="prevSection()">← Anterior</button>
-</div>
-
-<div class="form-body" id="form-body"></div>
-
-<div class="bottom-bar">
-  <button class="btn-pdf" onclick="gerarPDF()">📄 Gerar PDF do Grupo</button>
-  <button class="btn-advance" id="btn-next" onclick="nextSection()">Próxima seção →</button>
-</div>
-```
-
-  </div>
-</div>
-
-<!-- ── DONE ────────────────────────────────────────────────────────── -->
+<!-- DONE -->
 
 <div id="screen-done" class="screen">
   <div class="done-card">
     <div class="done-icon">🏆</div>
     <h2 class="done-title">Dossiê Completo!</h2>
-    <p class="done-sub">Todas as seções foram preenchidas.<br>Agora gere o PDF do grupo e entregue ao professor.</p>
+    <p class="done-sub">Todas as seções preenchidas.<br>Gere o PDF e entregue ao professor.</p>
     <div class="done-box">
-      <strong id="done-grupo-nome"></strong>
-      <p>O PDF conterá as respostas de todos os integrantes do grupo juntas em um único documento.</p>
+      <strong id="done-info"></strong>
+      <p>O PDF conterá as respostas de todos os integrantes do grupo em um único documento.</p>
     </div>
     <button class="btn-primary" onclick="gerarPDF()">📄 Gerar PDF do Grupo</button>
-    <br><br>
-    <button class="btn-pdf" style="width:100%" onclick="voltarApp()">← Voltar e revisar</button>
+    <button class="btn-sec" onclick="voltarApp()">← Voltar e revisar</button>
   </div>
 </div>
-
-<!-- ── PRINT AREA ──────────────────────────────────────────────────── -->
 
 <div id="print-area"></div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════════
-   ⚙️  CONFIGURAÇÃO DO FIREBASE
-   Cole aqui as credenciais do seu projeto Firebase.
-   Instruções: veja o arquivo COMO_CONFIGURAR.txt
-   ══════════════════════════════════════════════════════════════════ */
-const FIREBASE_CONFIG = {
+/* ════════════════════════════════════════════════════════
+   COLE SUAS CREDENCIAIS DO FIREBASE AQUI
+   ════════════════════════════════════════════════════════ */
+const firebaseConfig = {
   apiKey: "AIzaSyCQFnRrAN0eHXHHwbeAn6skN-Vrmsj2vGE",
   authDomain: "dossie-modelos.firebaseapp.com",
   databaseURL: "https://dossie-modelos-default-rtdb.firebaseio.com",
@@ -759,514 +276,407 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "282523303414",
   appId: "1:282523303414:web:35e8a1d9c75bf352a51bd7"
 };
+/* ════════════════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════════════════════════════
-   📚 DADOS DO DOSSIÊ
-   ══════════════════════════════════════════════════════════════════ */
 const MODELOS = [
-  {
-    id: "dalton", nome: "Dalton", emoji: "🔵", cor: "#1A5276",
-    secoes: [
-      { id: "contexto",  titulo: "1. Contexto histórico",       pergunta: "Em que século Dalton desenvolveu seu modelo? O que os cientistas já sabiam sobre a matéria nessa época?",                                              tipo: "texto", linhas: 3 },
-      { id: "postulados",titulo: "2. As ideias principais",      pergunta: "Liste pelo menos 4 postulados (ideias centrais) do modelo de Dalton:",                                                                                  tipo: "lista", itens: ["Postulado 1", "Postulado 2", "Postulado 3", "Postulado 4"] },
-      { id: "explicava", titulo: "3. O que explicava bem",       pergunta: "Quais fenômenos ou leis químicas o modelo conseguia justificar?",                                                                                       tipo: "texto", linhas: 3 },
-      { id: "limitacao", titulo: "4. A grande limitação",        pergunta: "O que o modelo não conseguia explicar? O que ficou de fora?",                                                                                          tipo: "texto", linhas: 3 },
-      { id: "derrubou",  titulo: "5. O que derrubou esse modelo",pergunta: "Que descoberta ou experimento mostrou que o modelo estava incompleto?",                                                                                 tipo: "texto", linhas: 2 },
-      { id: "apelido",   titulo: "6. Apelido do modelo",         pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                                                  tipo: "texto", linhas: 2 },
-      { id: "conexao",   titulo: "7. Conexão pessoal",           pergunta: "Por que faz sentido que o primeiro modelo fosse tão simples? O que Dalton tinha de diferente dos filósofos gregos que já falavam em átomos antes dele?", tipo: "texto", linhas: 3 },
-    ]
-  },
-  {
-    id: "thomson", nome: "Thomson", emoji: "🟡", cor: "#784212",
-    secoes: [
-      { id: "contexto",    titulo: "1. Contexto histórico",            pergunta: "O que estava acontecendo na ciência quando Thomson fez sua descoberta? Que tipo de experimento estava sendo feito na época?",       tipo: "texto", linhas: 3 },
-      { id: "experimento", titulo: "2. O experimento do tubo catódico",pergunta: "Explique com suas palavras: o que Thomson usou, o que observou e o que concluiu.",                                                  tipo: "texto", linhas: 4 },
-      { id: "descoberta",  titulo: "3. A grande descoberta",           pergunta: "O que Thomson descobriu que Dalton não sabia? Como isso mudou tudo?",                                                               tipo: "texto", linhas: 3 },
-      { id: "modelo",      titulo: "4. Como Thomson imaginava o átomo",pergunta: "Onde ficavam os elétrons? E a carga positiva? Como o átomo era neutro?",                                                           tipo: "texto", linhas: 3 },
-      { id: "limitacao",   titulo: "5. A grande limitação",            pergunta: "O modelo de Thomson não conseguia explicar o quê? O que ele deixou em aberto?",                                                    tipo: "texto", linhas: 2 },
-      { id: "apelido",     titulo: "6. Apelido do modelo",             pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                             tipo: "texto", linhas: 2 },
-      { id: "conexao",     titulo: "7. Conexão pessoal",               pergunta: "O raio no experimento se desviou para a placa positiva. Por que isso prova que o elétron tem carga negativa? Explique o raciocínio.", tipo: "texto", linhas: 3 },
-    ]
-  },
-  {
-    id: "rutherford", nome: "Rutherford", emoji: "🔴", cor: "#7B241C",
-    secoes: [
-      { id: "contexto",    titulo: "1. Contexto histórico",           pergunta: "Rutherford foi aluno de Thomson. Como um modelo levou ao outro? O que motivou o experimento?",                                                   tipo: "texto", linhas: 3 },
-      { id: "experimento", titulo: "2. O experimento da folha de ouro",pergunta: "O que Rutherford bombardeou, com o quê, o que esperava encontrar e o que de fato aconteceu?",                                                   tipo: "texto", linhas: 4 },
-      { id: "trajetorias", titulo: "3. As três trajetórias",           pergunta: "Explique o que aconteceu com cada grupo de partículas alfa e o que isso revelou sobre a estrutura do átomo:",                                   tipo: "trajetorias", itens: ["Maioria das partículas", "Algumas partículas", "Poucas partículas (voltaram)"] },
-      { id: "descoberta",  titulo: "4. A grande descoberta",           pergunta: "O que Rutherford concluiu? Descreva o modelo: onde fica o núcleo, onde ficam os elétrons e qual a proporção de tamanho.",                       tipo: "texto", linhas: 3 },
-      { id: "limitacao",   titulo: "5. A grande limitação",            pergunta: "Pela física clássica, o que deveria acontecer com um elétron girando em volta do núcleo? Por que isso era um problema sério?",                  tipo: "texto", linhas: 3 },
-      { id: "apelido",     titulo: "6. Apelido do modelo",             pergunta: "Qual o apelido popular desse modelo e por que ele recebeu esse nome?",                                                                           tipo: "texto", linhas: 2 },
-      { id: "conexao",     titulo: "7. Conexão pessoal",               pergunta: "Rutherford disse que foi como 'atirar uma bala num papel de seda e ela voltar e te acertar'. O que ele quis dizer com isso?",                   tipo: "texto", linhas: 3 },
-    ]
-  },
-  {
-    id: "bohr", nome: "Bohr", emoji: "🟢", cor: "#145A32",
-    secoes: [
-      { id: "contexto",     titulo: "1. Contexto histórico",        pergunta: "Bohr foi trabalhar no laboratório de Rutherford. Que problema urgente ele precisava resolver?",                                                     tipo: "texto",  linhas: 3 },
-      { id: "ideia",        titulo: "2. A ideia revolucionária",     pergunta: "O que Bohr propôs que nenhum cientista anterior havia pensado? O que são os níveis de energia (camadas eletrônicas)?",                             tipo: "texto",  linhas: 3 },
-      { id: "salto",        titulo: "3. O salto quântico",           pergunta: "O que acontece com o elétron quando absorve energia? E quando libera? O que é emitido nesse processo?",                                            tipo: "texto",  linhas: 3 },
-      { id: "cores",        titulo: "4. Por que explica as cores",   pergunta: "Diferentes elementos emitem cores diferentes na chama. Por que o modelo de Bohr explica isso e os anteriores não conseguiam?",                    tipo: "texto",  linhas: 3 },
-      { id: "distribuicao", titulo: "5. Distribuição eletrônica",    pergunta: "Quantos elétrons cabem em cada camada? Preencha e depois distribua os elétrons do Sódio (Na, Z=11) e do Cloro (Cl, Z=17):",                      tipo: "camadas" },
-      { id: "limitacao",    titulo: "6. A grande limitação",         pergunta: "O modelo de Bohr foi um grande avanço, mas o que ele não conseguia explicar — especialmente para átomos maiores?",                                tipo: "texto",  linhas: 2 },
-      { id: "conexao",      titulo: "7. Conexão pessoal",            pergunta: "O modelo de Bohr ainda é ensinado no ensino médio mesmo não sendo o mais moderno. Por que você acha que isso acontece?",                          tipo: "texto",  linhas: 3 },
-    ]
-  },
+  { id:"dalton",     nome:"Dalton",     emoji:"🔵", cor:"#1A5276",
+    secoes:[
+      {id:"s1",titulo:"1. Contexto histórico",      pergunta:"Em que século Dalton desenvolveu seu modelo? O que os cientistas já sabiam sobre a matéria nessa época?",tipo:"texto",linhas:3},
+      {id:"s2",titulo:"2. As ideias principais",     pergunta:"Liste pelo menos 4 postulados (ideias centrais) do modelo de Dalton:",tipo:"lista",itens:["Postulado 1","Postulado 2","Postulado 3","Postulado 4"]},
+      {id:"s3",titulo:"3. O que explicava bem",      pergunta:"Quais fenômenos ou leis químicas o modelo conseguia justificar?",tipo:"texto",linhas:3},
+      {id:"s4",titulo:"4. A grande limitação",       pergunta:"O que o modelo não conseguia explicar? O que ficou de fora?",tipo:"texto",linhas:3},
+      {id:"s5",titulo:"5. O que derrubou o modelo",  pergunta:"Que descoberta ou experimento mostrou que o modelo estava incompleto?",tipo:"texto",linhas:2},
+      {id:"s6",titulo:"6. Apelido do modelo",        pergunta:"Qual o apelido popular desse modelo e por que ele recebeu esse nome?",tipo:"texto",linhas:2},
+      {id:"s7",titulo:"7. Conexão pessoal",          pergunta:"Por que faz sentido que o primeiro modelo fosse tão simples? O que Dalton tinha de diferente dos filósofos gregos?",tipo:"texto",linhas:3},
+    ]},
+  { id:"thomson",    nome:"Thomson",    emoji:"🟡", cor:"#784212",
+    secoes:[
+      {id:"s1",titulo:"1. Contexto histórico",            pergunta:"O que estava acontecendo na ciência quando Thomson fez sua descoberta?",tipo:"texto",linhas:3},
+      {id:"s2",titulo:"2. O experimento do tubo catódico",pergunta:"O que Thomson usou, o que observou e o que concluiu?",tipo:"texto",linhas:4},
+      {id:"s3",titulo:"3. A grande descoberta",           pergunta:"O que Thomson descobriu que Dalton não sabia? Como isso mudou tudo?",tipo:"texto",linhas:3},
+      {id:"s4",titulo:"4. Como imaginou o átomo",         pergunta:"Onde ficavam os elétrons? E a carga positiva? Como o átomo era neutro?",tipo:"texto",linhas:3},
+      {id:"s5",titulo:"5. A grande limitação",            pergunta:"O modelo de Thomson não conseguia explicar o quê?",tipo:"texto",linhas:2},
+      {id:"s6",titulo:"6. Apelido do modelo",             pergunta:"Qual o apelido popular e por que ele recebeu esse nome?",tipo:"texto",linhas:2},
+      {id:"s7",titulo:"7. Conexão pessoal",               pergunta:"O raio se desviou para a placa positiva. Por que isso prova que o elétron tem carga negativa?",tipo:"texto",linhas:3},
+    ]},
+  { id:"rutherford", nome:"Rutherford", emoji:"🔴", cor:"#7B241C",
+    secoes:[
+      {id:"s1",titulo:"1. Contexto histórico",            pergunta:"Rutherford foi aluno de Thomson. Como um modelo levou ao outro?",tipo:"texto",linhas:3},
+      {id:"s2",titulo:"2. O experimento da folha de ouro",pergunta:"O que Rutherford bombardeou, com o quê, o que esperava e o que aconteceu?",tipo:"texto",linhas:4},
+      {id:"s3",titulo:"3. As três trajetórias",           pergunta:"O que aconteceu com cada grupo de partículas e o que isso revelou?",tipo:"trajetorias",itens:["Maioria das partículas","Algumas partículas","Poucas partículas (voltaram)"]},
+      {id:"s4",titulo:"4. A grande descoberta",           pergunta:"Descreva o modelo: onde fica o núcleo, os elétrons e a proporção de tamanho.",tipo:"texto",linhas:3},
+      {id:"s5",titulo:"5. A grande limitação",            pergunta:"Pela física clássica, o que deveria acontecer com um elétron girando no núcleo?",tipo:"texto",linhas:3},
+      {id:"s6",titulo:"6. Apelido do modelo",             pergunta:"Qual o apelido popular e por que ele recebeu esse nome?",tipo:"texto",linhas:2},
+      {id:"s7",titulo:"7. Conexão pessoal",               pergunta:"'Atirar uma bala num papel de seda e ela voltar e te acertar.' O que Rutherford quis dizer?",tipo:"texto",linhas:3},
+    ]},
+  { id:"bohr",       nome:"Bohr",       emoji:"🟢", cor:"#145A32",
+    secoes:[
+      {id:"s1",titulo:"1. Contexto histórico",       pergunta:"Que problema urgente Bohr precisava resolver no laboratório de Rutherford?",tipo:"texto",linhas:3},
+      {id:"s2",titulo:"2. A ideia revolucionária",   pergunta:"O que Bohr propôs? O que são os níveis de energia (camadas eletrônicas)?",tipo:"texto",linhas:3},
+      {id:"s3",titulo:"3. O salto quântico",         pergunta:"O que acontece com o elétron ao absorver energia? E ao liberar?",tipo:"texto",linhas:3},
+      {id:"s4",titulo:"4. Por que explica as cores", pergunta:"Por que o modelo de Bohr explica as cores da chama e os anteriores não conseguiam?",tipo:"texto",linhas:3},
+      {id:"s5",titulo:"5. Distribuição eletrônica",  pergunta:"Quantos elétrons cabem em cada camada? Distribua também para Sódio e Cloro:",tipo:"camadas"},
+      {id:"s6",titulo:"6. A grande limitação",       pergunta:"O que o modelo de Bohr não conseguia explicar para átomos maiores?",tipo:"texto",linhas:2},
+      {id:"s7",titulo:"7. Conexão pessoal",          pergunta:"O modelo de Bohr ainda é ensinado no ensino médio. Por que você acha que isso acontece?",tipo:"texto",linhas:3},
+    ]},
 ];
 
-const QUADRO_FINAL = {
-  titulo: "📋 Quadro Final — Evolução dos Modelos",
-  linhas: ["Dalton", "Thomson", "Rutherford", "Bohr"],
-  reflexao: "A ciência avança errando e corrigindo. O que a história dos modelos atômicos ensina sobre como o conhecimento científico funciona? Escreva com suas palavras."
+const QUADRO = {
+  linhas:["Dalton","Thomson","Rutherford","Bohr"],
+  reflexao:"A ciência avança errando e corrigindo. O que a história dos modelos atômicos ensina sobre como o conhecimento científico funciona?"
 };
 
-/* ══════════════════════════════════════════════════════════════════
-   🗂️  ESTADO DO APP
-   ══════════════════════════════════════════════════════════════════ */
-let db, refGrupo;
-let state = {
-  nome: "", turma: "", grupo: "", modeloPrincipal: "",
-  modeloIdx: 0, secaoIdx: 0,
-  answers: {}  // chave: "modeloId/secaoId/campo"  valor: string
-};
-let saveTimer = null;
-let listener = null;
+// Estado
+let db=null, refGrupo=null, fbListener=null;
+let S={nome:"",turma:"",grupo:"",modeloIdx:0,secIdx:0,answers:{},fbOk:false};
+let saveTimer=null;
 
-/* ══════════════════════════════════════════════════════════════════
-   🚀 INICIALIZAÇÃO
-   ══════════════════════════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', () => {
-  try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.database();
-  } catch(e) {}
-  document.getElementById('loading').classList.add('hidden');
-  mostrarTela('home');
-});
-
-function mostrarTela(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   🔑 ENTRAR
-   ══════════════════════════════════════════════════════════════════ */
-function entrar() {
-  const nome   = document.getElementById('input-nome').value.trim();
-  const turma  = document.getElementById('input-turma').value.trim().toUpperCase();
-  const grupo  = document.getElementById('input-grupo').value.trim();
-  const modelo = document.getElementById('input-modelo').value;
-  const err    = document.getElementById('home-error');
-
-  if (!nome || !turma || !grupo || !modelo) {
-    err.textContent = "Preencha todos os campos antes de continuar.";
-    err.style.display = 'block';
-    return;
-  }
-  err.style.display = 'none';
-
-  state.nome   = nome;
-  state.turma  = turma;
-  state.grupo  = grupo;
-  state.modeloPrincipal = modelo;
-  state.modeloIdx = MODELOS.findIndex(m => m.id === modelo);
-  if (state.modeloIdx < 0) state.modeloIdx = 0;
-  state.secaoIdx = 0;
-
-  const chave = `turma_${turma}/grupo_${grupo}`;
-  refGrupo = db.ref(`dossies/${chave}`);
-
-  // Escuta mudanças em tempo real
-  if (listener) listener();
-  listener = refGrupo.on('value', snap => {
-    const data = snap.val() || {};
-    const novas = data.respostas || {};
-    // Só atualiza campos que não estão focados agora
-    Object.entries(novas).forEach(([k, v]) => {
-      if (state.answers[k] !== v) {
-        state.answers[k] = v;
-        const el = document.querySelector(`[data-key="${k}"]`);
-        if (el && document.activeElement !== el) el.value = v;
-      }
-    });
-    atualizarUI();
+// ── FIREBASE (carrega dinamicamente) ──────────────────────────────
+function carregarFirebase(){
+  return new Promise(resolve=>{
+    if(window.firebase){resolve(true);return;}
+    const s1=document.createElement('script');
+    s1.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+    s1.onload=()=>{
+      const s2=document.createElement('script');
+      s2.src='https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js';
+      s2.onload=()=>resolve(true);
+      s2.onerror=()=>resolve(false);
+      document.head.appendChild(s2);
+    };
+    s1.onerror=()=>resolve(false);
+    document.head.appendChild(s1);
   });
+}
 
-  // Abre tela do app
+function setStatus(tipo,msg){
+  const el=document.getElementById('firebase-status');
+  const txt=document.getElementById('firebase-status-text');
+  el.style.display='flex';
+  el.className='status-bar '+tipo;
+  txt.textContent=msg;
+}
+
+// ── ENTRAR ────────────────────────────────────────────────────────
+async function entrar(){
+  const nome=document.getElementById('inp-nome').value.trim();
+  const turma=document.getElementById('inp-turma').value.trim().toUpperCase();
+  const grupo=document.getElementById('inp-grupo').value.trim();
+  const modelo=document.getElementById('inp-modelo').value;
+  const err=document.getElementById('home-err');
+
+  if(!nome||!turma||!grupo||!modelo){
+    err.textContent='Preencha todos os campos antes de continuar.';
+    err.style.display='block';return;
+  }
+  err.style.display='none';
+
+  S.nome=nome; S.turma=turma; S.grupo=grupo;
+  S.modeloIdx=MODELOS.findIndex(m=>m.id===modelo);
+  if(S.modeloIdx<0)S.modeloIdx=0;
+  S.secIdx=0;
+
+  // Abre o app imediatamente — Firebase conecta em segundo plano
   mostrarTela('app');
-  document.getElementById('h-grupo').textContent = `Turma ${turma} · Grupo ${grupo}`;
-  document.getElementById('h-turma-nome').textContent = nome;
-  renderModelTabs();
-  renderSection();
+  document.getElementById('h-grupo').textContent=`Turma ${turma} · Grupo ${grupo}`;
+  document.getElementById('h-nome').textContent=nome;
+  setSyncStatus('offline','Conectando...');
+  renderTabs(); renderSec();
+
+  // Conecta Firebase em segundo plano
+  setStatus('warn','Conectando ao banco de dados...');
+  const ok=await carregarFirebase();
+  if(!ok){setSyncStatus('offline','Sem conexão — respostas salvas localmente');return;}
+
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    db=firebase.database();
+    const chave=`turma_${turma}/grupo_${grupo}`;
+    refGrupo=db.ref(`dossies/${chave}`);
+
+    // Teste de conexão
+    await refGrupo.child('_ping').set(Date.now());
+    S.fbOk=true;
+    setSyncStatus('ok','Sincronizado');
+
+    // Escuta mudanças
+    if(fbListener)refGrupo.off('value',fbListener);
+    fbListener=refGrupo.on('value',snap=>{
+      const data=snap.val()||{};
+      const novas=data.respostas||{};
+      let mudou=false;
+      Object.entries(novas).forEach(([k,v])=>{
+        if(S.answers[k]!==v){S.answers[k]=v;mudou=true;
+          const el=document.querySelector(`[data-key="${k}"]`);
+          if(el&&document.activeElement!==el)el.value=v;
+        }
+      });
+      if(mudou)atualizarUI();
+    });
+
+  }catch(e){
+    S.fbOk=false;
+    setSyncStatus('offline','Sem Firebase — respostas salvas localmente');
+  }
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   💾 SALVAR
-   ══════════════════════════════════════════════════════════════════ */
-function salvar(campo, valor) {
-  state.answers[campo] = valor;
-  setSyncStatus('saving');
+// ── SALVAR ────────────────────────────────────────────────────────
+function salvar(campo,valor){
+  S.answers[campo]=valor;
+  // Sempre salva local
+  try{localStorage.setItem(`dossie_${S.turma}_${S.grupo}`,JSON.stringify(S.answers));}catch(e){}
+  if(!S.fbOk)return;
+  setSyncStatus('saving','Salvando...');
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    refGrupo.update({ respostas: state.answers })
-      .then(() => setSyncStatus('ok'))
-      .catch(() => setSyncStatus('error'));
-  }, 600);
+  saveTimer=setTimeout(()=>{
+    refGrupo.update({respostas:S.answers,info:{turma:S.turma,grupo:S.grupo,atualizado:Date.now()}})
+      .then(()=>setSyncStatus('ok','Salvo ✓'))
+      .catch(()=>setSyncStatus('offline','Erro — salvo localmente'));
+  },700);
 }
 
-function setSyncStatus(s) {
-  const dot  = document.getElementById('sync-dot');
-  const text = document.getElementById('sync-text');
-  if (s === 'saving') { dot.className = 'sync-dot saving'; text.textContent = 'Salvando...'; }
-  else if (s === 'ok') { dot.className = 'sync-dot'; text.textContent = 'Salvo ✓'; }
-  else { dot.className = 'sync-dot saving'; text.textContent = 'Erro de conexão'; }
+function setSyncStatus(tipo,txt){
+  const dot=document.getElementById('sync-dot');
+  const t=document.getElementById('sync-txt');
+  dot.className='sync-dot'+(tipo==='saving'?' saving':tipo==='offline'?' offline':'');
+  t.textContent=txt;
 }
 
-function getVal(modeloId, secaoId, campo) {
-  return state.answers[`${modeloId}/${secaoId}/${campo}`] || '';
-}
-function setVal(modeloId, secaoId, campo, valor) {
-  salvar(`${modeloId}/${secaoId}/${campo}`, valor);
-}
+function getV(mid,sid,c){return S.answers[`${mid}/${sid}/${c}`]||'';}
+function setV(mid,sid,c,v){salvar(`${mid}/${sid}/${c}`,v);}
 
-/* ══════════════════════════════════════════════════════════════════
-   🎨 RENDER
-   ══════════════════════════════════════════════════════════════════ */
-function renderModelTabs() {
-  const tabs = document.getElementById('model-tabs');
-  tabs.innerHTML = MODELOS.map((m, i) => `
-    <button class="model-tab ${i === state.modeloIdx ? 'active' : ''}"
-      style="${i === state.modeloIdx ? `background:${m.cor}` : ''}"
-      onclick="irModelo(${i})">
-      ${m.emoji} ${m.nome}
-    </button>
-  `).join('') + `
-    <button class="model-tab ${state.modeloIdx === 4 ? 'active' : ''}"
-      style="${state.modeloIdx === 4 ? 'background:#4A235A' : ''}"
-      onclick="irModelo(4)">
-      📋 Final
-    </button>`;
+// ── RENDER ────────────────────────────────────────────────────────
+function renderTabs(){
+  const tabs=document.getElementById('mtabs');
+  tabs.innerHTML=MODELOS.map((m,i)=>`
+    <button class="m-tab${i===S.modeloIdx?' active':''}"
+      style="${i===S.modeloIdx?'background:'+m.cor:''}"
+      onclick="irModelo(${i})">${m.emoji} ${m.nome}</button>
+  `).join('')+`
+    <button class="m-tab${S.modeloIdx===4?' active':''}"
+      style="${S.modeloIdx===4?'background:#4A235A':''}"
+      onclick="irModelo(4)">📋 Final</button>`;
 }
 
-function renderSection() {
-  const modelo = MODELOS[state.modeloIdx];
-  if (!modelo) { renderFinal(); return; }
+function renderSec(){
+  const m=MODELOS[S.modeloIdx];
+  if(!m){renderFinal();return;}
+  const s=m.secoes[S.secIdx];
+  document.getElementById('app-hdr').style.background=m.cor;
 
-  const secao = modelo.secoes[state.secaoIdx];
-  const header = document.getElementById('app-header');
-  header.style.background = modelo.cor;
+  const dots=document.getElementById('sdots');
+  dots.innerHTML=m.secoes.map((_,i)=>`
+    <div class="sec-dot${i===S.secIdx?' active':''}"
+      style="${i===S.secIdx||temResp(m.id,m.secoes[i].id)?'background:'+m.cor:''}"
+      onclick="irSec(${i})"></div>`).join('');
 
-  // Dots
-  const dots = document.getElementById('section-dots');
-  dots.innerHTML = modelo.secoes.map((_, i) => {
-    const preenchida = temResposta(modelo.id, modelo.secoes[i].id);
-    return `<div class="section-dot ${i === state.secaoIdx ? 'active' : ''} ${preenchida ? 'filled' : ''}"
-      style="${i === state.secaoIdx ? `background:${modelo.cor}` : preenchida ? `background:${modelo.cor}` : ''}"
-      onclick="irSecao(${i})"></div>`;
-  }).join('');
+  document.getElementById('btn-prev').style.display=
+    (S.modeloIdx===0&&S.secIdx===0)?'none':'block';
 
-  // Botão prev
-  document.getElementById('btn-prev').style.display =
-    (state.modeloIdx === 0 && state.secaoIdx === 0) ? 'none' : 'block';
+  const bn=document.getElementById('btn-next');
+  const isLast=S.modeloIdx===MODELOS.length-1&&S.secIdx===m.secoes.length-1;
+  bn.style.background=isLast?'#4A235A':m.cor;
+  bn.textContent=isLast?'📋 Quadro Final →':'Próxima →';
 
-  // Botão next
-  const btn = document.getElementById('btn-next');
-  const isLast = state.modeloIdx === MODELOS.length - 1 && state.secaoIdx === modelo.secoes.length - 1;
-  btn.style.background = isLast ? '#4A235A' : modelo.cor;
-  btn.textContent = isLast ? '📋 Ir para o Quadro Final →' : 'Próxima seção →';
-
-  // Body
-  const body = document.getElementById('form-body');
-  body.innerHTML = `
-    <h2 class="section-titulo" style="color:${modelo.cor}">${secao.titulo}</h2>
-    <p class="section-pergunta">${secao.pergunta}</p>
-    ${renderCampo(modelo, secao)}
-  `;
-
-  atualizarProgresso();
+  document.getElementById('fbody').innerHTML=
+    `<h2 class="sec-title" style="color:${m.cor}">${s.titulo}</h2>
+     <p class="sec-q">${s.pergunta}</p>
+     ${renderCampo(m,s)}`;
+  atualizarProg();
 }
 
-function renderCampo(modelo, secao) {
-  const mid = modelo.id, sid = secao.id;
-
-  if (secao.tipo === 'texto') {
-    const val = getVal(mid, sid, 'main');
-    return `<textarea rows="${secao.linhas + 1}" data-key="${mid}/${sid}/main"
-      oninput="setVal('${mid}','${sid}','main',this.value)"
-      placeholder="Escreva sua resposta aqui...">${val}</textarea>`;
+function renderCampo(m,s){
+  const mid=m.id,sid=s.id;
+  if(s.tipo==='texto'){
+    const v=getV(mid,sid,'main');
+    return `<textarea rows="${s.linhas+1}" data-key="${mid}/${sid}/main"
+      oninput="setV('${mid}','${sid}','main',this.value)"
+      placeholder="Escreva sua resposta aqui...">${esc(v)}</textarea>`;
 
 }
-
-if (secao.tipo === ‘lista’) {
-return secao.itens.map((item, i) => {
-const val = getVal(mid, sid, `item_${i}`);
-return `<div class="bullet-row"> <span class="bullet-label" style="color:${modelo.cor}">${item}:</span> <input class="answer-input" data-key="${mid}/${sid}/item_${i}" type="text" value="${escHtml(val)}" placeholder="..." oninput="setVal('${mid}','${sid}','item_${i}',this.value)"> </div>`;
+if(s.tipo===‘lista’){
+return s.itens.map((item,i)=>{
+const v=getV(mid,sid,`i${i}`);
+return `<div class="bullet-row"> <span class="bullet-lbl" style="color:${m.cor}">${item}:</span> <input class="ans-input" data-key="${mid}/${sid}/i${i}" type="text" value="${esc(v)}" placeholder="..." oninput="setV('${mid}','${sid}','i${i}',this.value)"> </div>`;
 }).join(’’);
 }
-
-if (secao.tipo === ‘trajetorias’) {
-return secao.itens.map((item, i) => {
-const vO = getVal(mid, sid, `t${i}_o`);
-const vP = getVal(mid, sid, `t${i}_p`);
-return `<div class="traj-card"> <div class="traj-header" style="background:${modelo.cor}">${item}</div> <div class="traj-body"> <span class="traj-label">O que aconteceu:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}_o" oninput="setVal('${mid}','${sid}','t${i}_o',this.value)" placeholder="...">${vO}</textarea> <span class="traj-label">O que isso prova:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}_p" oninput="setVal('${mid}','${sid}','t${i}_p',this.value)" placeholder="...">${vP}</textarea> </div> </div>`;
+if(s.tipo===‘trajetorias’){
+return s.itens.map((item,i)=>{
+const vO=getV(mid,sid,`t${i}o`),vP=getV(mid,sid,`t${i}p`);
+return `<div class="traj-card"> <div class="traj-hdr" style="background:${m.cor}">${item}</div> <div class="traj-body"> <span class="traj-lbl">O que aconteceu:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}o" oninput="setV('${mid}','${sid}','t${i}o',this.value)" placeholder="...">${esc(vO)}</textarea> <span class="traj-lbl">O que isso prova:</span> <textarea rows="2" data-key="${mid}/${sid}/t${i}p" oninput="setV('${mid}','${sid}','t${i}p',this.value)" placeholder="...">${esc(vP)}</textarea> </div> </div>`;
 }).join(’’);
 }
-
-if (secao.tipo === ‘camadas’) {
-const camadas = [‘K’,‘L’,‘M’,‘N’];
-const elementos = [
-{ nome: ‘Sódio (Na, Z=11)’,  cams: [‘K’,‘L’,‘M’] },
-{ nome: ‘Cloro (Cl, Z=17)’, cams: [‘K’,‘L’,‘M’] },
-];
-let html = `<p style="font-size:14px;font-weight:700;color:#555;margin-bottom:10px">Máximo de elétrons por camada:</p> <div class="camadas-grid">`;
-camadas.forEach(c => {
-const v = getVal(mid, sid, `cam_${c}`);
-html += `<div class="camada-box"> <div class="camada-circle" style="background:${modelo.cor}">${c}</div> <input class="camada-input" data-key="${mid}/${sid}/cam_${c}" type="text" value="${escHtml(v)}" placeholder="máx" oninput="setVal('${mid}','${sid}','cam_${c}',this.value)"> </div>`;
+if(s.tipo===‘camadas’){
+const cams=[‘K’,‘L’,‘M’,‘N’];
+const els=[{n:‘Sódio (Na, Z=11)’,ei:0,c:[‘K’,‘L’,‘M’]},{n:‘Cloro (Cl, Z=17)’,ei:1,c:[‘K’,‘L’,‘M’]}];
+let h=`<p style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">Máximo de elétrons por camada:</p> <div class="cam-grid">`;
+cams.forEach(c=>{
+const v=getV(mid,sid,`c${c}`);
+h+=`<div class="cam-box"> <div class="cam-circle" style="background:${m.cor}">${c}</div> <input class="cam-input" data-key="${mid}/${sid}/c${c}" type="text" value="${esc(v)}" placeholder="máx" oninput="setV('${mid}','${sid}','c${c}',this.value)"> </div>`;
 });
-html += `</div> <p style="font-size:14px;font-weight:700;color:#555;margin:14px 0 8px">Distribuição eletrônica:</p>`;
-elementos.forEach((el, ei) => {
-html += `<div class="elemento-card"> <div class="elemento-nome" style="color:${modelo.cor}">${el.nome}</div> <div class="elemento-row">`;
-el.cams.forEach(c => {
-const v = getVal(mid, sid, `el_${ei}_${c}`);
-html += `<div class="camada-box"> <div class="camada-circle" style="background:${modelo.cor};width:40px;height:40px;font-size:15px">${c}</div> <input class="camada-input" data-key="${mid}/${sid}/el_${ei}_${c}" type="text" value="${escHtml(v)}" placeholder="e⁻" oninput="setVal('${mid}','${sid}','el_${ei}_${c}',this.value)"> </div>`;
+h+=`</div><p style="font-size:13px;font-weight:700;color:#555;margin:12px 0 6px">Distribuição eletrônica:</p>`;
+els.forEach(el=>{
+h+=`<div class="el-card"> <div class="el-nome" style="color:${m.cor}">${el.n}</div> <div class="el-row">`;
+el.c.forEach(c=>{
+const v=getV(mid,sid,`e${el.ei}${c}`);
+h+=`<div class="cam-box"> <div class="cam-circle" style="background:${m.cor};width:38px;height:38px;font-size:14px">${c}</div> <input class="cam-input" data-key="${mid}/${sid}/e${el.ei}${c}" type="text" value="${esc(v)}" placeholder="e⁻" oninput="setV('${mid}','${sid}','e${el.ei}${c}',this.value)"> </div>`;
 });
-html += `</div></div>`;
+h+=`</div></div>`;
 });
-return html;
+return h;
 }
-
 return ‘’;
 }
 
-function renderFinal() {
-state.modeloIdx = 4;
-const header = document.getElementById(‘app-header’);
-header.style.background = ‘#4A235A’;
-document.getElementById(‘section-dots’).innerHTML = ‘’;
-document.getElementById(‘btn-prev’).style.display = ‘block’;
+function renderFinal(){
+S.modeloIdx=4;
+document.getElementById(‘app-hdr’).style.background=’#4A235A’;
+document.getElementById(‘sdots’).innerHTML=’’;
+document.getElementById(‘btn-prev’).style.display=‘block’;
+const bn=document.getElementById(‘btn-next’);
+bn.style.background=’#145A32’; bn.textContent=‘✅ Concluir Dossiê’;
 
-const btn = document.getElementById(‘btn-next’);
-btn.style.background = ‘#145A32’;
-btn.textContent = ‘✅ Concluir Dossiê’;
+let h=`<h2 class="sec-title" style="color:#4A235A">📋 Quadro Final — Evolução dos Modelos</h2>
 
-const body = document.getElementById(‘form-body’);
-let html = `<h2 class="section-titulo" style="color:#4A235A">${QUADRO_FINAL.titulo}</h2>
+  <p class="sec-q">Preencha depois de pesquisar todos os modelos. É o mapa mais útil no dia do jogo.</p>`;
 
-  <p class="section-pergunta">Preencha este quadro depois de pesquisar todos os modelos. Ele é o mapa mais útil do seu grupo no dia do jogo.</p>`;
-
-QUADRO_FINAL.linhas.forEach(row => {
-const vR = getVal(‘final’, row, ‘resolveu’);
-const vL = getVal(‘final’, row, ‘deixou’);
-html += `<div class="final-card"> <div class="final-card-header" style="background:${corDoModelo(row)}">${emojiDoModelo(row)} ${row}</div> <div class="final-card-body"> <span class="final-field-label">O que resolveu do modelo anterior:</span> <textarea rows="2" data-key="final/${row}/resolveu" oninput="setVal('final','${row}','resolveu',this.value)" placeholder="...">${vR}</textarea> <span class="final-field-label">O que deixou sem resposta:</span> <textarea rows="2" data-key="final/${row}/deixou" oninput="setVal('final','${row}','deixou',this.value)" placeholder="...">${vL}</textarea> </div> </div>`;
+QUADRO.linhas.forEach(row=>{
+const vR=getV(‘final’,row,‘r’),vL=getV(‘final’,row,‘l’);
+h+=`<div class="final-card"> <div class="final-hdr" style="background:${corM(row)}">${emojiM(row)} ${row}</div> <div class="final-body"> <span class="final-lbl">O que resolveu do modelo anterior:</span> <textarea rows="2" data-key="final/${row}/r" oninput="setV('final','${row}','r',this.value)" placeholder="...">${esc(vR)}</textarea> <span class="final-lbl">O que deixou sem resposta:</span> <textarea rows="2" data-key="final/${row}/l" oninput="setV('final','${row}','l',this.value)" placeholder="...">${esc(vL)}</textarea> </div> </div>`;
 });
 
-const vRef = getVal(‘final’, ‘reflexao’, ‘main’);
-html += `<h3 class="section-titulo" style="color:#4A235A;margin-top:20px">Reflexão final</h3>
+const vRef=getV(‘final’,‘ref’,‘main’);
+h+=`<h3 class="sec-title" style="color:#4A235A;margin-top:18px">Reflexão final</h3>
 
-  <p class="section-pergunta">${QUADRO_FINAL.reflexao}</p>
-  <textarea rows="5" data-key="final/reflexao/main"
-    oninput="setVal('final','reflexao','main',this.value)"
-    placeholder="Escreva com suas palavras...">${vRef}</textarea>`;
+  <p class="sec-q">${QUADRO.reflexao}</p>
+  <textarea rows="5" data-key="final/ref/main"
+    oninput="setV('final','ref','main',this.value)"
+    placeholder="Escreva com suas palavras...">${esc(vRef)}</textarea>`;
 
-body.innerHTML = html;
-atualizarProgresso();
-renderModelTabs();
-}
-
-/* ══════════════════════════════════════════════════════════════════
-🧭 NAVEGAÇÃO
-══════════════════════════════════════════════════════════════════ */
-function irModelo(idx) {
-state.modeloIdx = idx;
-state.secaoIdx = 0;
-renderModelTabs();
-if (idx === 4) renderFinal();
-else renderSection();
+document.getElementById(‘fbody’).innerHTML=h;
+atualizarProg(); renderTabs();
 }
 
-function irSecao(idx) {
-state.secaoIdx = idx;
-renderSection();
-renderModelTabs();
+// ── NAVEGAÇÃO ─────────────────────────────────────────────────────
+function irModelo(i){S.modeloIdx=i;S.secIdx=0;renderTabs();i===4?renderFinal():renderSec();}
+function irSec(i){S.secIdx=i;renderSec();renderTabs();}
+function nextSec(){
+const m=MODELOS[S.modeloIdx];
+if(!m){concluir();return;}
+if(S.secIdx<m.secoes.length-1){S.secIdx++;renderSec();}
+else if(S.modeloIdx<MODELOS.length-1){S.modeloIdx++;S.secIdx=0;renderTabs();renderSec();}
+else{renderFinal();renderTabs();}
 }
-
-function nextSection() {
-const modelo = MODELOS[state.modeloIdx];
-if (!modelo) { concluir(); return; }
-if (state.secaoIdx < modelo.secoes.length - 1) {
-state.secaoIdx++;
-renderSection();
-} else if (state.modeloIdx < MODELOS.length - 1) {
-state.modeloIdx++;
-state.secaoIdx = 0;
-renderModelTabs();
-renderSection();
-} else {
-renderFinal();
-renderModelTabs();
+function prevSec(){
+if(S.modeloIdx===4){S.modeloIdx=MODELOS.length-1;S.secIdx=MODELOS[S.modeloIdx].secoes.length-1;renderTabs();renderSec();return;}
+if(S.secIdx>0){S.secIdx–;renderSec();}
+else if(S.modeloIdx>0){S.modeloIdx–;S.secIdx=MODELOS[S.modeloIdx].secoes.length-1;renderTabs();renderSec();}
 }
-}
-
-function prevSection() {
-if (state.modeloIdx === 4) {
-state.modeloIdx = MODELOS.length - 1;
-state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;
-renderModelTabs();
-renderSection();
-return;
-}
-if (state.secaoIdx > 0) {
-state.secaoIdx–;
-renderSection();
-} else if (state.modeloIdx > 0) {
-state.modeloIdx–;
-state.secaoIdx = MODELOS[state.modeloIdx].secoes.length - 1;
-renderModelTabs();
-renderSection();
-}
-}
-
-function concluir() {
-document.getElementById(‘done-grupo-nome’).textContent =
-`Turma ${state.turma} · Grupo ${state.grupo}`;
+function concluir(){
+document.getElementById(‘done-info’).textContent=`Turma ${S.turma} · Grupo ${S.grupo}`;
 mostrarTela(‘done’);
 }
+function voltarApp(){mostrarTela(‘app’);renderTabs();renderSec();}
 
-function voltarApp() {
-mostrarTela(‘app’);
-renderModelTabs();
-renderSection();
+// ── PROGRESSO ─────────────────────────────────────────────────────
+function temResp(mid,sid){
+const pf=`${mid}/${sid}/`;
+return Object.keys(S.answers).some(k=>k.startsWith(pf)&&S.answers[k].trim());
 }
-
-/* ══════════════════════════════════════════════════════════════════
-📊 PROGRESSO
-══════════════════════════════════════════════════════════════════ */
-function temResposta(modeloId, secaoId) {
-const prefix = `${modeloId}/${secaoId}/`;
-return Object.keys(state.answers).some(k => k.startsWith(prefix) && state.answers[k].trim());
+function atualizarProg(){
+let p=0,t=MODELOS.reduce((s,m)=>s+m.secoes.length,0)+QUADRO.linhas.length+1;
+MODELOS.forEach(m=>m.secoes.forEach(s=>{if(temResp(m.id,s.id))p++;}));
+QUADRO.linhas.forEach(r=>{if(getV(‘final’,r,‘r’).trim())p++;});
+if(getV(‘final’,‘ref’,‘main’).trim())p++;
+document.getElementById(‘prog’).style.width=Math.round(p/t*100)+’%’;
 }
-
-function atualizarProgresso() {
-let preenchidas = 0;
-const total = MODELOS.reduce((s, m) => s + m.secoes.length, 0) + QUADRO_FINAL.linhas.length + 1;
-MODELOS.forEach(m => m.secoes.forEach(s => { if (temResposta(m.id, s.id)) preenchidas++; }));
-QUADRO_FINAL.linhas.forEach(row => { if (getVal(‘final’, row, ‘resolveu’).trim()) preenchidas++; });
-if (getVal(‘final’, ‘reflexao’, ‘main’).trim()) preenchidas++;
-document.getElementById(‘progress-fill’).style.width = Math.round(preenchidas / total * 100) + ‘%’;
-}
-
-function atualizarUI() {
-renderModelTabs();
-atualizarProgresso();
-// Reatualizar campos da seção atual
-document.querySelectorAll(’[data-key]’).forEach(el => {
-if (document.activeElement !== el) {
-const v = state.answers[el.dataset.key] || ‘’;
-if (el.value !== v) el.value = v;
-}
+function atualizarUI(){
+renderTabs(); atualizarProg();
+document.querySelectorAll(’[data-key]’).forEach(el=>{
+if(document.activeElement!==el){const v=S.answers[el.dataset.key]||’’;if(el.value!==v)el.value=v;}
 });
 }
 
-/* ══════════════════════════════════════════════════════════════════
-📄 GERAR PDF
-══════════════════════════════════════════════════════════════════ */
-function gerarPDF() {
-const area = document.getElementById(‘print-area’);
-let html = ` <div class="print-cover"> <h1>⚛️ Dossiê Científico</h1> <p class="sub">Modelos Atômicos — 1º Ano do Ensino Médio</p> <div class="group-box"> <p>Turma: <strong>${escHtml(state.turma)}</strong></p> <p>Grupo: <strong>${escHtml(state.grupo)}</strong></p> <p style="font-size:11px;margin-top:6px;color:#777">Gerado em ${new Date().toLocaleDateString('pt-BR')}</p> </div> </div>`;
+// ── PDF ───────────────────────────────────────────────────────────
+function gerarPDF(){
+const area=document.getElementById(‘print-area’);
+let h=`<div class="pc">
+<h1>⚛️ Dossiê Científico</h1>
+<p class="sub">Modelos Atômicos — 1º Ano do Ensino Médio</p>
+<div class="gbox">
+<p>Turma: <strong>${esc(S.turma)}</strong></p>
+<p>Grupo: <strong>${esc(S.grupo)}</strong></p>
+<p style="font-size:10px;color:#777;margin-top:6px">Gerado em ${new Date().toLocaleDateString(‘pt-BR’)}</p>
+</div>
 
-MODELOS.forEach((modelo, mi) => {
-if (mi > 0) html += `<div class="print-page-break"></div>`;
-html += `<div class="print-model"> <div class="print-model-header" style="background:${modelo.cor}">${modelo.emoji} Modelo de ${modelo.nome}</div>`;
+  </div>`;
 
-```
-modelo.secoes.forEach(secao => {
-  html += `<div class="print-section">
-    <div class="print-section-title">${secao.titulo}</div>
-    <div class="print-question">${secao.pergunta}</div>`;
-
-  if (secao.tipo === 'texto') {
-    const v = getVal(modelo.id, secao.id, 'main');
-    html += `<div class="print-answer">${escHtml(v) || '(sem resposta)'}</div>`;
-  }
-
-  if (secao.tipo === 'lista') {
-    html += `<table class="print-table"><tbody>`;
-    secao.itens.forEach((item, i) => {
-      const v = getVal(modelo.id, secao.id, `item_${i}`);
-      html += `<tr><th style="width:120px">${item}</th><td>${escHtml(v) || '—'}</td></tr>`;
-    });
-    html += `</tbody></table>`;
-  }
-
-  if (secao.tipo === 'trajetorias') {
-    html += `<table class="print-table"><thead><tr><th>Trajetória</th><th>O que aconteceu</th><th>O que isso prova</th></tr></thead><tbody>`;
-    secao.itens.forEach((item, i) => {
-      const vO = getVal(modelo.id, secao.id, `t${i}_o`);
-      const vP = getVal(modelo.id, secao.id, `t${i}_p`);
-      html += `<tr><td><strong>${item}</strong></td><td>${escHtml(vO)||'—'}</td><td>${escHtml(vP)||'—'}</td></tr>`;
-    });
-    html += `</tbody></table>`;
-  }
-
-  if (secao.tipo === 'camadas') {
-    const camadas = ['K','L','M','N'];
-    html += `<table class="print-table"><thead><tr><th>Camada</th>${camadas.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
-    html += `<tr><td>Máximo de e⁻</td>${camadas.map(c=>`<td>${escHtml(getVal(modelo.id,secao.id,`cam_${c}`))||'—'}</td>`).join('')}</tr>`;
-    const els = [{nome:'Sódio (Na, Z=11)',ei:0},{nome:'Cloro (Cl, Z=17)',ei:1}];
-    els.forEach(({nome,ei}) => {
-      html += `<tr><td>${nome}</td>${['K','L','M'].map(c=>`<td>${escHtml(getVal(modelo.id,secao.id,`el_${ei}_${c}`))||'—'}</td>`).join('')}<td>—</td></tr>`;
-    });
-    html += `</tbody></table>`;
-  }
-
-  html += `</div>`;
+MODELOS.forEach((m,mi)=>{
+if(mi>0)h+=`<div class="ppb"></div>`;
+h+=`<div class="pm"><div class="pm-hdr" style="background:${m.cor}">${m.emoji} Modelo de ${m.nome}</div>`;
+m.secoes.forEach(s=>{
+h+=`<div class="ps"><div class="ps-title">${s.titulo}</div><div class="ps-q">${s.pergunta}</div>`;
+if(s.tipo===‘texto’){
+h+=`<div class="ps-ans">${esc(getV(m.id,s.id,'main'))||'(sem resposta)'}</div>`;
+}
+if(s.tipo===‘lista’){
+h+=`<table class="pt"><tbody>`;
+s.itens.forEach((item,i)=>h+=`<tr><th style="width:110px">${item}</th><td>${esc(getV(m.id,s.id,`i${i}`))||'—'}</td></tr>`);
+h+=`</tbody></table>`;
+}
+if(s.tipo===‘trajetorias’){
+h+=`<table class="pt"><thead><tr><th>Trajetória</th><th>O que aconteceu</th><th>O que prova</th></tr></thead><tbody>`;
+s.itens.forEach((item,i)=>h+=`<tr><td><b>${item}</b></td><td>${esc(getV(m.id,s.id,`t${i}o`))||'—'}</td><td>${esc(getV(m.id,s.id,`t${i}p`))||'—'}</td></tr>`);
+h+=`</tbody></table>`;
+}
+if(s.tipo===‘camadas’){
+h+=`<table class="pt"><thead><tr><th>Camada</th><th>K</th><th>L</th><th>M</th><th>N</th></tr></thead><tbody>`;
+h+=`<tr><td>Máx e⁻</td>${['K','L','M','N'].map(c=>`<td>${esc(getV(m.id,s.id,`c${c}`))||’—’}</td>`).join('')}</tr>`;
+[{n:‘Sódio (Na)’,ei:0},{n:‘Cloro (Cl)’,ei:1}].forEach(el=>
+h+=`<tr><td>${el.n}</td>${['K','L','M'].map(c=>`<td>${esc(getV(m.id,s.id,`e${el.ei}${c}`))||’—’}</td>`).join('')}<td>—</td></tr>`);
+h+=`</tbody></table>`;
+}
+h+=`</div>`;
 });
-html += `</div>`;
-```
-
+h+=`</div>`;
 });
 
-// Quadro final
-html += `<div class="print-page-break"></div>
+h+=`<div class="ppb"></div>
 
-  <div class="print-final-section">
-    <div class="print-model-header" style="background:#4A235A">📋 Quadro Final — Evolução dos Modelos</div>
-    <table class="print-table">
-      <thead><tr><th>Modelo</th><th>O que resolveu</th><th>O que deixou sem resposta</th></tr></thead>
-      <tbody>`;
-  QUADRO_FINAL.linhas.forEach(row => {
-    const vR = getVal('final', row, 'resolveu');
-    const vL = getVal('final', row, 'deixou');
-    html += `<tr><td><strong>${row}</strong></td><td>${escHtml(vR)||'—'}</td><td>${escHtml(vL)||'—'}</td></tr>`;
-  });
-  html += `</tbody></table>
-    <div class="print-section" style="margin-top:16px">
-      <div class="print-section-title">Reflexão final</div>
-      <div class="print-question">${QUADRO_FINAL.reflexao}</div>
-      <div class="print-answer">${escHtml(getVal('final','reflexao','main'))||'(sem resposta)'}</div>
+  <div class="pm">
+    <div class="pm-hdr" style="background:#4A235A">📋 Quadro Final — Evolução dos Modelos</div>
+    <table class="pt"><thead><tr><th>Modelo</th><th>O que resolveu</th><th>O que deixou sem resposta</th></tr></thead><tbody>`;
+  QUADRO.linhas.forEach(r=>h+=`<tr><td><b>${r}</b></td><td>${esc(getV('final',r,'r'))||'—'}</td><td>${esc(getV('final',r,'l'))||'—'}</td></tr>`);
+  h+=`</tbody></table>
+    <div class="ps" style="margin-top:14px">
+      <div class="ps-title">Reflexão final</div>
+      <div class="ps-q">${QUADRO.reflexao}</div>
+      <div class="ps-ans">${esc(getV('final','ref','main'))||'(sem resposta)'}</div>
     </div>
   </div>`;
 
-area.innerHTML = html;
-setTimeout(() => window.print(), 200);
+area.innerHTML=h;
+setTimeout(()=>window.print(),200);
 }
 
-/* ══════════════════════════════════════════════════════════════════
-🛠️  UTILITÁRIOS
-══════════════════════════════════════════════════════════════════ */
-function corDoModelo(nome) {
-const m = MODELOS.find(x => x.nome === nome);
-return m ? m.cor : ‘#333’;
+// ── UTILITÁRIOS ───────────────────────────────────────────────────
+function mostrarTela(id){
+document.querySelectorAll(’.screen’).forEach(s=>s.classList.remove(‘active’));
+document.getElementById(‘screen-’+id).classList.add(‘active’);
 }
-function emojiDoModelo(nome) {
-const m = MODELOS.find(x => x.nome === nome);
-return m ? m.emoji : ‘▪️’;
+function corM(n){const m=MODELOS.find(x=>x.nome===n);return m?m.cor:’#333’;}
+function emojiM(n){const m=MODELOS.find(x=>x.nome===n);return m?m.emoji:‘▪️’;}
+function esc(s){if(!s)return’’;return s.replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’);}
+
+// Carrega respostas salvas localmente ao abrir
+window.addEventListener(‘DOMContentLoaded’,()=>{
+// Tenta recuperar sessão anterior
+const url=new URLSearchParams(location.search);
+if(url.get(‘turma’)&&url.get(‘grupo’)){
+const key=`dossie_${url.get('turma')}_${url.get('grupo')}`;
+try{const saved=localStorage.getItem(key);if(saved)S.answers=JSON.parse(saved);}catch(e){}
 }
-function escHtml(str) {
-if (!str) return ‘’;
-return str.replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’);
-}
+});
 </script>
 
 </body>
